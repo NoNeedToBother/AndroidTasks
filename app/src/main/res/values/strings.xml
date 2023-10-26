@@ -3,4 +3,8 @@
     <string name="enter_phone_number">Enter phone number</string>
     <string name="enter_question_number">Enter number of questions</string>
     <string name="generate_questions">Generate questions</string>
+    <string name="submit_ans">Submit answers</string>
+    <string name="incorrect_phone_numb">Phone number is not correct</string>
+    <string name="incorrect_question_numb">Pick the number between 1 and 10</string>
+    <string name="question_pos">Question: %1$d out of %2$d</string>
 </resources>

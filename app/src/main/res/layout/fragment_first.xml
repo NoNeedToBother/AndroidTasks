@@ -36,6 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="64dp"
         android:text="@string/generate_questions"
-        android:enabled="false" />
+        android:enabled="false"
+        android:backgroundTint="@color/button_default"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

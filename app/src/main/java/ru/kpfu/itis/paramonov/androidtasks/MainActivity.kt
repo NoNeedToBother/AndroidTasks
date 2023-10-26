@@ -2,9 +2,9 @@ package ru.kpfu.itis.paramonov.androidtasks
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ActivityMainBinding
+import ru.kpfu.itis.paramonov.androidtasks.ui.FirstFragment
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null

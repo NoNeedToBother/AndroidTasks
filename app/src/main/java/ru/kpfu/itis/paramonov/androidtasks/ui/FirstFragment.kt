@@ -1,16 +1,17 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.widget.addTextChangedListener
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import org.w3c.dom.Text
+import ru.kpfu.itis.paramonov.androidtasks.MainActivity
+import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentFirstBinding
 
 class FirstFragment : Fragment() {
@@ -22,7 +23,7 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFirstBinding.inflate(inflater)
         return binding.root
     }
@@ -33,16 +34,34 @@ class FirstFragment : Fragment() {
     }
 
     private fun init() {
-        checkText()
+        checkEditTexts()
         checkQuestionNumber()
-        enableButton()
     }
 
-    private fun enableButton() {
+    @SuppressLint("ResourceAsColor")
+    private fun tryEnableButton() {
         with(binding) {
             if (isPhoneNumberValid(etPhoneNumber.text.toString()) && checkQuestionNumber()) {
-                btnGenerate.isClickable = true
+                btnGenerate.apply {
+                    isEnabled = true
+                    setBackgroundColor(R.color.light_green)
+                    setOnClickListener {
+                        (requireActivity() as MainActivity).goToScreen(
+                            TestQuestionsFragment.newInstance(etQuestionNumb.text.toString().toInt()),
+                            TestQuestionsFragment.TEST_QUESTIONS_FRAGMENT_TAG,
+                            false
+                        )
+                    }
+                }
             }
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun disableButton() {
+        with(binding.btnGenerate) {
+            isEnabled = false
+            setBackgroundColor(R.color.button_default)
         }
     }
 
@@ -51,7 +70,7 @@ class FirstFragment : Fragment() {
         setSelection(text.length)
     }
 
-    private fun getTextWatcher(et : EditText) : TextWatcher {
+    private fun getPhoneNumbTextWatcher(et : EditText) : TextWatcher {
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -59,7 +78,7 @@ class FirstFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 s?.apply {
                     if (count != 0 && checkFormatNecessity(s)) {
-                        when (s.length) {
+                        when (length) {
                             7 -> et.addSymbols(")-")
                             12, 15 -> et.addSymbols("-")
                         }
@@ -70,7 +89,10 @@ class FirstFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
                     if (!isPhoneNumberValid(it)) {
-                        et.error = "Phone number is not correct"
+                        et.error = getString(R.string.incorrect_phone_numb)
+                        disableButton()
+                    } else {
+                        tryEnableButton()
                     }
                 }
             }
@@ -88,27 +110,56 @@ class FirstFragment : Fragment() {
         return regEx.find(phoneNumber) != null
     }
 
-    private fun checkText() {
+    private fun checkEditTexts() {
         with(binding) {
             etPhoneNumber.apply {
                 setOnClickListener {
                     if (text.isEmpty()) addSymbols("+7 (9")
                 }
-                addTextChangedListener(getTextWatcher(this@apply))
+                addTextChangedListener(getPhoneNumbTextWatcher(this@apply))
+            }
+
+            etQuestionNumb.apply {
+                addTextChangedListener(getQuestionNumbTextWatcher(this@apply))
             }
         }
+    }
+
+    private fun getQuestionNumbTextWatcher(et : EditText) = object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (!checkQuestionNumber()) {
+                et.error = getString(R.string.incorrect_question_numb)
+                disableButton()
+            } else {
+                tryEnableButton()
+            }
+        }
+
+
     }
 
     private fun checkQuestionNumber() : Boolean {
         with(binding) {
             etQuestionNumb.apply {
-                val questionNumber = text.toString().toInt()
-                return if (questionNumber !in 1..20) {
-                    error = "Pick the number between 1 and 20"
+                return if (!text.isNullOrEmpty()) {
+                    val questionNumber = text.toString().toInt()
+                    questionNumber in 1..10
+                } else {
                     false
-                } else true
+                }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {

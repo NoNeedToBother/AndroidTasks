@@ -1,11 +1,14 @@
 package ru.kpfu.itis.paramonov.androidtasks.util
 
+import ru.kpfu.itis.paramonov.androidtasks.model.BsdButton
 import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
+import ru.kpfu.itis.paramonov.androidtasks.model.Date
+import ru.kpfu.itis.paramonov.androidtasks.model.Model
 import kotlin.random.Random
 
 class CityFactsRepository {
     companion object {
-        private var currentFacts = mutableListOf<CityFact>()
+        private var currentModels = mutableListOf<Model>()
 
         private val allCityFacts = listOf<CityFact>(
             CityFact(1, "Moscow", "Московское метро", "Московское метро за сутки перевозит в среднем 9 млн. человек и занимает третье место в мире по загруженности. 10 тысяч поездов работают как часы: в обычном режиме поезда ходят каждые 8 минут, в час пик – каждые четыре."),
@@ -51,23 +54,31 @@ class CityFactsRepository {
             CityFact(35, "Madrid", "Основание Мадрида", "Как известно, к 8 веку весь Пиренейский полуостров завоеван арабами. Именно они и основали будущую испанскую столицу. В руки европейцев Мадрид попал только в 1085 году, когда его покорил король Альфонсо VI.")
         )
 
-        fun getFactsList(factCount : Int) : List<CityFact>{
-            if (currentFacts.isEmpty()) {
+        fun getFactsList(factCount : Int) : List<Model>{
+            if (currentModels.isEmpty()) {
+                currentModels.add(BsdButton())
                 for (i in 0..factCount) {
-                    currentFacts.add(getRandomFact())
+                    currentModels.add(getRandomFact())
+                    if (i % 8 == 0) currentModels.add(Date())
                 }
             }
-            return currentFacts
+            return currentModels
+        }
+
+        fun getFactsList() : List<Model>{
+            return currentModels
         }
 
         private fun getRandomFact() : CityFact{
-            return allCityFacts[Random.nextInt(allCityFacts.size + 1)]
+            return allCityFacts[Random.nextInt(allCityFacts.size)]
         }
 
 
         fun addFacts(factCount : Int) {
+            if (factCount <= 0) return
             for (i in 0..factCount) {
-                currentFacts.add(getRandomFact())
+                val randomPos = Random.nextInt(1, currentModels.size + 1)
+                currentModels.add(randomPos, getRandomFact())
             }
         }
     }

@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
 import ru.kpfu.itis.paramonov.androidtasks.R
 
-class FactsViewHolder(
+class FactItem(
     private val binding: ItemCityFactBinding,
     private val onFactClicked: ((CityFact) -> Unit),
     private val onLikeClicked: ((Int, CityFact) -> Unit),

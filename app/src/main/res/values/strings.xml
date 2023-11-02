@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="enter_fact_number">Введите количество фактов</string>
+    <string name="proceed_facts">Перейти к фактам</string>
+    <string name="error_fact_numb">Введите число от 0 до 45</string>
+    <string name="title">Заголовок</string>
+    <string name="content">Описание факта</string>
 </resources>

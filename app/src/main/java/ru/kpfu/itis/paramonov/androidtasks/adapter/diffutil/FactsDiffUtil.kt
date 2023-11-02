@@ -1,6 +1,7 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.adapter.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
+import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
 
 class FactsDiffUtil(
     private val oldItemsList: List<CityFact>,

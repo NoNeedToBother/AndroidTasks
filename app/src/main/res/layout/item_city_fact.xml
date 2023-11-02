@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_fact_title"
+            android:id="@+id/tv_fact_item_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -27,20 +27,19 @@
             tools:text="@string/title" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_fact_city_img"
+            android:id="@+id/iv_fact_item_img"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="160dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
-            android:maxHeight="180dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_fact_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_fact_item_title" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_fact_content"
+            android:id="@+id/tv_fact_item_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -51,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_like_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_fact_city_img"
+            app:layout_constraintTop_toBottomOf="@id/iv_fact_item_img"
             tools:text="@string/content" />
 
         <androidx.appcompat.widget.AppCompatImageView

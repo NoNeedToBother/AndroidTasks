@@ -1,11 +1,14 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ru.kpfu.itis.paramonov.androidtasks.adapter.diffutil.FactsDiffUtil
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ItemCityFactBinding
+import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
+import ru.kpfu.itis.paramonov.androidtasks.ui.holders.FactsViewHolder
 
 class FactAdapter(
     private val onFactClicked: ((CityFact) -> Unit),

@@ -1,10 +1,13 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.util
 
+import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
 import kotlin.random.Random
 
 class CityFactsRepository {
     companion object {
-        private val cityNews = listOf<CityFact>(
+        private var currentFacts = mutableListOf<CityFact>()
+
+        private val allCityFacts = listOf<CityFact>(
             CityFact(1, "Moscow", "Московское метро", "Московское метро за сутки перевозит в среднем 9 млн. человек и занимает третье место в мире по загруженности. 10 тысяч поездов работают как часы: в обычном режиме поезда ходят каждые 8 минут, в час пик – каждые четыре."),
             CityFact(2, "Moscow", "Останкинская башня", "Самая высокая телебашня Европы находится в Москве. Это Останкинская телебашня, ее высота — 540,1 м."),
             CityFact(3, "Moscow", "О происхождении названия Москвы", "«Москва» означает то ли «медведь у воды» (фин. «моск» — медведь, «ва» — вода), то ли просто «мокрое место» (древнеслав. «москва» — сырость, мокро). Имя город получил по названию реки."),
@@ -46,13 +49,26 @@ class CityFactsRepository {
             CityFact(33, "Madrid", "Скульптура дьявола", "В мадридском парке Ретиро установленная единственная в мире скульптура дьявола. Ее довольно трудно отыскать, но попытаться стоит, ведь нашедшего, по местному преданию, ждут удача и успех."),
             CityFact(34, "Madrid", "Город солнца", "Мадрид считается одним из самых солнечных городов Европы – по данным синоптиков, около 250 дней в году небо над испанской столицей голубое и безоблачное."),
             CityFact(35, "Madrid", "Основание Мадрида", "Как известно, к 8 веку весь Пиренейский полуостров завоеван арабами. Именно они и основали будущую испанскую столицу. В руки европейцев Мадрид попал только в 1085 году, когда его покорил король Альфонсо VI.")
-
-            //TODO: еще 10 записей
         )
 
         fun getFactsList(factCount : Int) : List<CityFact>{
-            val shuffled = cityNews.shuffled()
-            return shuffled.subList(0, factCount + 1)
+            if (currentFacts.isEmpty()) {
+                for (i in 0..factCount) {
+                    currentFacts.add(getRandomFact())
+                }
+            }
+            return currentFacts
+        }
+
+        private fun getRandomFact() : CityFact{
+            return allCityFacts[Random.nextInt(allCityFacts.size + 1)]
+        }
+
+
+        fun addFacts(factCount : Int) {
+            for (i in 0..factCount) {
+                currentFacts.add(getRandomFact())
+            }
         }
     }
 }

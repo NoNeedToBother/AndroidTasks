@@ -1,14 +1,14 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.ui.fragments
 
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import ru.kpfu.itis.paramonov.androidtasks.MainActivity
+import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentStartBinding
 
 class StartFragment : Fragment(){

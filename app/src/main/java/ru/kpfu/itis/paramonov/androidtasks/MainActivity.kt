@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ActivityMainBinding
+import ru.kpfu.itis.paramonov.androidtasks.ui.fragments.StartFragment
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null

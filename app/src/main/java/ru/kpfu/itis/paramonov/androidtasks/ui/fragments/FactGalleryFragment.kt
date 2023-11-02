@@ -1,7 +1,6 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,15 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import ru.kpfu.itis.paramonov.androidtasks.MainActivity
+import ru.kpfu.itis.paramonov.androidtasks.R
+import ru.kpfu.itis.paramonov.androidtasks.util.CityFactsRepository
+import ru.kpfu.itis.paramonov.androidtasks.adapter.FactAdapter
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamsKey
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentFactGalleryBinding
+import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
 
 class FactGalleryFragment : Fragment() {
     private var _binding: FragmentFactGalleryBinding? = null
@@ -39,26 +46,33 @@ class FactGalleryFragment : Fragment() {
 
 
         with(binding) {
-            val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            rvCityFacts.layoutManager = layoutManager
-            rvCityFacts.adapter = factAdapter
-
             arguments?.getInt(ParamsKey.FACT_COUNT_PARAM)?.let {
-                val facts = CityFactsRepository.getFactsList(it)
+                val layoutManager : LayoutManager = if (it <= 12) {
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                } else {
+                    StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+                }
+                rvCityFacts.layoutManager = layoutManager
+                rvCityFacts.adapter = factAdapter
                 factAdapter?.setItems(CityFactsRepository.getFactsList(it))
-                Toast.makeText(context, facts[0].content, Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun onFactClicked(fact : CityFact) {}
+    private fun onFactClicked(fact : CityFact) {
+        (requireActivity() as MainActivity).goToScreen(
+            FactFragment.newInstance(fact),
+            FactFragment.FACT_FRAGMENT_TAG,
+            true
+        )
+    }
 
     private fun onLikeClicked(position : Int, fact : CityFact) {
         factAdapter?.updateItem(position, fact)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
         factAdapter = null
     }

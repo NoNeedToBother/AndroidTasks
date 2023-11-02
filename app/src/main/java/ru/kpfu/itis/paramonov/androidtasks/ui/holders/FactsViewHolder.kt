@@ -1,7 +1,9 @@
-package ru.kpfu.itis.paramonov.androidtasks
+package ru.kpfu.itis.paramonov.androidtasks.ui.holders
 
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ItemCityFactBinding
 import androidx.recyclerview.widget.RecyclerView
+import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
+import ru.kpfu.itis.paramonov.androidtasks.R
 
 class FactsViewHolder(
     private val binding: ItemCityFactBinding,
@@ -13,12 +15,12 @@ class FactsViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            this.item?.let(onFactClicked)
+            this.item?.let{onFactClicked(it)}
         }
         binding.ivLikeBtn.setOnClickListener {
             this.item?.let {
-                val data = it.copy(isLiked = !it.isLiked)
-                onLikeClicked(adapterPosition, data)
+                it.isLiked = !it.isLiked
+                onLikeClicked(adapterPosition, it)
             }
         }
     }
@@ -26,9 +28,9 @@ class FactsViewHolder(
     fun bindItem(item: CityFact) {
         this.item = item
         with(binding) {
-            tvFactTitle.text = item.title
-            item.content?.let { tvFactContent.text = it }
-            with(ivFactCityImg) {
+            tvFactItemTitle.text = item.title
+            item.content.let { tvFactItemContent.text = it }
+            with(ivFactItemImg) {
                 when(item.city) {
                     "Moscow" -> setImageResource(R.drawable.img_moscow)
                     "London" -> setImageResource(R.drawable.img_london)

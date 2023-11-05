@@ -58,8 +58,8 @@ class CityFactsRepository {
             if (currentModels.isEmpty()) {
                 currentModels.add(BsdButton())
                 for (i in 0..factCount) {
-                    currentModels.add(getRandomFact())
                     if (i % 8 == 0) currentModels.add(Date())
+                    currentModels.add(getRandomFact())
                 }
             }
             return currentModels

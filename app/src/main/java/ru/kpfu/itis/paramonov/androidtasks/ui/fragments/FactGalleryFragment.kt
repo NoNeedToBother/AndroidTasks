@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -49,7 +51,14 @@ class FactGalleryFragment : Fragment() {
                 val layoutManager : LayoutManager = if (it <= 12) {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 } else {
-                    StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+                    GridLayoutManager(context, 2).apply {
+                        spanSizeLookup = object : SpanSizeLookup() {
+                            override fun getSpanSize(position: Int): Int {
+                                return if (position == 1 || (position - 1) % 9 == 0) 2
+                                else 1
+                            }
+                        }
+                    }
                 }
                 rvCityFacts.layoutManager = layoutManager
                 rvCityFacts.adapter = rvAdapter

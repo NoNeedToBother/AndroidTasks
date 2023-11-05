@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,6 +49,10 @@ class FactGalleryFragment : Fragment() {
 
         with(binding) {
             arguments?.getInt(ParamsKey.FACT_COUNT_PARAM)?.let {
+                if (it == 0) {
+                    tvNoFacts.visibility = TextView.VISIBLE
+                    return
+                }
                 val layoutManager : LayoutManager = if (it <= 12) {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 } else {

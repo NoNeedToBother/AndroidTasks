@@ -57,7 +57,7 @@ class CityFactsRepository {
         fun getFactsList(factCount : Int) : List<Model>{
             if (currentModels.isEmpty()) {
                 currentModels.add(BsdButton())
-                for (i in 0..factCount) {
+                for (i in 0 until factCount) {
                     if (i % 8 == 0) currentModels.add(Date())
                     currentModels.add(getRandomFact())
                 }
@@ -76,8 +76,8 @@ class CityFactsRepository {
 
         fun addFacts(factCount : Int) {
             if (factCount <= 0) return
-            for (i in 0..factCount) {
-                val randomPos = Random.nextInt(1, currentModels.size + 1)
+            for (i in 0 until factCount) {
+                val randomPos = Random.nextInt(2, currentModels.size + 1)
                 currentModels.add(randomPos, getRandomFact())
             }
         }

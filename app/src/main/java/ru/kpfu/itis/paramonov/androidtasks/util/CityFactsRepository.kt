@@ -55,12 +55,12 @@ class CityFactsRepository {
         )
 
         fun getFactsList(factCount : Int) : List<Model>{
-            if (currentModels.isEmpty()) {
-                currentModels.add(BsdButton())
-                for (i in 0 until factCount) {
-                    if (i % 8 == 0) currentModels.add(Date())
-                    currentModels.add(getRandomFact())
-                }
+            if (currentModels.isNotEmpty()) return currentModels
+            currentModels.clear()
+            currentModels.add(BsdButton())
+            for (i in 0 until factCount) {
+                if (i % 8 == 0) currentModels.add(Date())
+                currentModels.add(getRandomFact())
             }
             return currentModels
         }
@@ -80,6 +80,10 @@ class CityFactsRepository {
                 val randomPos = Random.nextInt(2, currentModels.size + 1)
                 currentModels.add(randomPos, getRandomFact())
             }
+        }
+
+        fun clearFacts() {
+            currentModels.clear()
         }
     }
 }

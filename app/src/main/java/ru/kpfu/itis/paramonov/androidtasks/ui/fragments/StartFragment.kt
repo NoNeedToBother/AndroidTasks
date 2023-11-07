@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import ru.kpfu.itis.paramonov.androidtasks.MainActivity
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentStartBinding
+import ru.kpfu.itis.paramonov.androidtasks.util.CityFactsRepository
 
 class StartFragment : Fragment(){
     private var _binding: FragmentStartBinding? = null
@@ -34,6 +35,7 @@ class StartFragment : Fragment(){
     }
 
     private fun init() {
+        CityFactsRepository.clearFacts()
         with(binding) {
             etFactNumb.addTextChangedListener {
                 it?.let {

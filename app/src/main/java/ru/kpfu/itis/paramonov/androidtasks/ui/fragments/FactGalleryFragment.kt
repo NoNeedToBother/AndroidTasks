@@ -9,10 +9,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import ru.kpfu.itis.paramonov.androidtasks.MainActivity
+import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.util.CityFactsRepository
 import ru.kpfu.itis.paramonov.androidtasks.adapter.RvAdapter
 import ru.kpfu.itis.paramonov.androidtasks.util.ParamsKey
@@ -53,10 +56,15 @@ class FactGalleryFragment : Fragment() {
                     tvNoFacts.visibility = TextView.VISIBLE
                     return
                 }
-                val layoutManager : LayoutManager = if (it <= 12) {
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+                val layoutManager : LayoutManager
+
+                if (it <= 12) {
+                    rvAdapter?.let {adapter ->
+                        ItemTouchHelper(getItemTouchHelperSwipeCallback(adapter)).attachToRecyclerView(rvCityFacts) }
+                    layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 } else {
-                    GridLayoutManager(context, 2).apply {
+                    layoutManager = GridLayoutManager(context, 2).apply {
                         spanSizeLookup = object : SpanSizeLookup() {
                             override fun getSpanSize(position: Int): Int {
                                 return if (position == 1 || (position - 1) % 9 == 0) 2
@@ -69,6 +77,42 @@ class FactGalleryFragment : Fragment() {
                 rvCityFacts.adapter = rvAdapter
                 rvAdapter?.setItems(CityFactsRepository.getFactsList(it))
             }
+        }
+    }
+
+    private fun getItemTouchHelperSwipeCallback(rvAdapter: RvAdapter) = object: ItemTouchHelper.Callback() {
+        override fun getMovementFlags(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ): Int {
+            return makeMovementFlags(0, ItemTouchHelper.LEFT)
+        }
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val pos = viewHolder.adapterPosition
+            val fact = rvAdapter.deleteItem(pos)
+            onFactDeleted(pos, fact, rvAdapter)
+        }
+
+        override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+            return 0.5f
+        }
+    }
+
+    private fun onFactDeleted(position: Int, fact : CityFact, adapter: RvAdapter) {
+        Snackbar.make(binding.root, getString(R.string.fact_deleted), Snackbar.LENGTH_SHORT).apply {
+            setAction(getString(R.string.undo_delete)) {
+                adapter.addItem(position, fact)
+            }
+            show()
         }
     }
 

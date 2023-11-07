@@ -89,4 +89,17 @@ class RvAdapter(
         this.factList[position] = item
         notifyItemChanged(position, item.isLiked)
     }
+
+    fun addItem(position: Int, item: CityFact) {
+        factList.add(position, item)
+        for (pos in position .. factList.size) {
+            notifyItemChanged(pos)
+        }
+    }
+
+    fun deleteItem(position: Int) : CityFact{
+        val fact = factList.removeAt(position)
+        notifyItemRemoved(position)
+        return fact as CityFact
+    }
 }

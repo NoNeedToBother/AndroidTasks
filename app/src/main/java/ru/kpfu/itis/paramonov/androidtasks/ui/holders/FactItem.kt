@@ -1,5 +1,8 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.holders
 
+import android.annotation.SuppressLint
+import android.view.View
+import android.view.View.OnLongClickListener
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ItemCityFactBinding
 import androidx.recyclerview.widget.RecyclerView
 import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
@@ -9,11 +12,17 @@ class FactItem(
     private val binding: ItemCityFactBinding,
     private val onFactClicked: ((CityFact) -> Unit),
     private val onLikeClicked: ((Int, CityFact) -> Unit),
+    private val onDeleteClicked: (Int, CityFact) -> Unit,
+    private var enableDeleteButton: Boolean
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var item: CityFact? = null
 
+
     init {
+        if (enableDeleteButton) {
+            binding.root.setOnLongClickListener(getOnLongClickListener())
+        }
         binding.root.setOnClickListener {
             this.item?.let{onFactClicked(it)}
         }
@@ -23,6 +32,23 @@ class FactItem(
                 onLikeClicked(adapterPosition, it)
             }
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun getOnLongClickListener() = OnLongClickListener {
+        with(binding.ivDeleteBtn) {
+            when (this.visibility) {
+                View.VISIBLE -> this.visibility = View.GONE
+                View.GONE -> {
+                    this.setOnClickListener {
+                        item?.let { onDeleteClicked(adapterPosition, it) }
+                    }
+                    this.visibility = View.VISIBLE
+                }
+                View.INVISIBLE -> this.visibility = View.VISIBLE
+            }
+        }
+        true
     }
 
     fun bindItem(item: CityFact) {

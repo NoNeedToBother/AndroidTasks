@@ -43,12 +43,6 @@ class FactGalleryFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        rvAdapter = RvAdapter(
-            onBsdButtonClicked = ::onBsdButtonClicked,
-            onFactClicked = ::onFactClicked,
-            onLikeClicked = ::onLikeClicked
-        )
-
 
         with(binding) {
             arguments?.getInt(ParamsKey.FACT_COUNT_PARAM)?.let {
@@ -60,9 +54,17 @@ class FactGalleryFragment : Fragment() {
                 val layoutManager : LayoutManager
 
                 if (it <= 12) {
+                    rvAdapter = RvAdapter(
+                        onBsdButtonClicked = ::onBsdButtonClicked,
+                        onFactClicked = ::onFactClicked,
+                        onLikeClicked = ::onLikeClicked,
+                        onDeleteClicked = ::onDeleteClicked,
+                        enableDeleteButton = false
+                    )
                     rvAdapter?.let {adapter ->
                         ItemTouchHelper(getItemTouchHelperSwipeCallback(adapter)).attachToRecyclerView(rvCityFacts) }
                     layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
                 } else {
                     layoutManager = GridLayoutManager(context, 2).apply {
                         spanSizeLookup = object : SpanSizeLookup() {
@@ -72,6 +74,13 @@ class FactGalleryFragment : Fragment() {
                             }
                         }
                     }
+                    rvAdapter = RvAdapter(
+                        onBsdButtonClicked = ::onBsdButtonClicked,
+                        onFactClicked = ::onFactClicked,
+                        onLikeClicked = ::onLikeClicked,
+                        onDeleteClicked = ::onDeleteClicked,
+                        enableDeleteButton = true
+                    )
                 }
                 rvCityFacts.layoutManager = layoutManager
                 rvCityFacts.adapter = rvAdapter
@@ -126,6 +135,13 @@ class FactGalleryFragment : Fragment() {
 
     private fun onLikeClicked(position : Int, fact : CityFact) {
         rvAdapter?.updateItem(position, fact)
+    }
+
+    private fun onDeleteClicked(position: Int, fact: CityFact) {
+        rvAdapter?.let {
+            it.deleteItem(position)
+            onFactDeleted(position, fact, it)
+        }
     }
 
     private fun onBsdButtonClicked() {

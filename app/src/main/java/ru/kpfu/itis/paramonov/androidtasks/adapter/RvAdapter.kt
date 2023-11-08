@@ -23,6 +23,8 @@ class RvAdapter(
     private val onBsdButtonClicked: () -> Unit,
     private val onFactClicked: ((CityFact) -> Unit),
     private val onLikeClicked: ((Int, CityFact) -> Unit),
+    private val onDeleteClicked: (Int, CityFact) -> Unit,
+    private val enableDeleteButton: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var factList = mutableListOf<Model>()
@@ -42,6 +44,8 @@ class RvAdapter(
                 binding = ItemCityFactBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 onFactClicked = onFactClicked,
                 onLikeClicked = onLikeClicked,
+                onDeleteClicked = onDeleteClicked,
+                enableDeleteButton = enableDeleteButton
             )
 
             R.layout.item_bsd_btn -> BottomSheetDisplayBtnItem(

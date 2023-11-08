@@ -48,16 +48,29 @@
             android:maxLines="1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_like_btn"
+            app:layout_constraintEnd_toStartOf="@id/iv_delete_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_fact_item_img"
             tools:text="@string/content" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_delete_btn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_like_btn"
+            android:src="@drawable/delete"
+            android:visibility="gone"
+            />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_like_btn"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

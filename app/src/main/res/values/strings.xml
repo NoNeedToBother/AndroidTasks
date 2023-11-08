@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="enter_fact_number">Введите количество фактов</string>
+    <string name="proceed_facts">Перейти к фактам</string>
+    <string name="error_fact_numb">Введите число от 0 до 45</string>
+    <string name="title">Заголовок</string>
+    <string name="content">Описание факта</string>
+    <string name="date">02.11.2023</string>
+    <string name="open_bsd">Открыть Bottom Sheet Display</string>
+    <string name="enter_fact_to_add_number">Введите количество фактов для добавления</string>
+    <string name="add_facts">Добавить факты</string>
+    <string name="error_add_fact_numb">Введите число от 0 до 5</string>
+    <string name="no_facts">Введено 0 фактов, поэтому здесь ничего нет</string>
+    <string name="undo_delete">Отменить удаление</string>
+    <string name="fact_deleted">Факт удален</string>
 </resources>

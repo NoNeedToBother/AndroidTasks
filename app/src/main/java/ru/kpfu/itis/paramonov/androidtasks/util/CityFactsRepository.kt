@@ -85,5 +85,9 @@ class CityFactsRepository {
         fun clearFacts() {
             currentModels.clear()
         }
+
+        fun updateCurrentModels(updated : MutableList<Model>) {
+            currentModels = updated
+        }
     }
 }

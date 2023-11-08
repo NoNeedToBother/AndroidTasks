@@ -3,6 +3,7 @@ package ru.kpfu.itis.paramonov.androidtasks.ui.holders
 import android.annotation.SuppressLint
 import android.view.View
 import android.view.View.OnLongClickListener
+import androidx.core.view.ViewCompat
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ItemCityFactBinding
 import androidx.recyclerview.widget.RecyclerView
 import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
@@ -10,7 +11,7 @@ import ru.kpfu.itis.paramonov.androidtasks.R
 
 class FactItem(
     private val binding: ItemCityFactBinding,
-    private val onFactClicked: ((CityFact) -> Unit),
+    private val onFactClicked: ((View, CityFact) -> Unit),
     private val onLikeClicked: ((Int, CityFact) -> Unit),
     private val onDeleteClicked: (Int, CityFact) -> Unit,
     private var enableDeleteButton: Boolean
@@ -24,7 +25,7 @@ class FactItem(
             binding.root.setOnLongClickListener(getOnLongClickListener())
         }
         binding.root.setOnClickListener {
-            this.item?.let{onFactClicked(it)}
+            this.item?.let{onFactClicked(binding.ivFactItemImg, it)}
         }
         binding.ivLikeBtn.setOnClickListener {
             this.item?.let {
@@ -34,7 +35,6 @@ class FactItem(
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     private fun getOnLongClickListener() = OnLongClickListener {
         with(binding.ivDeleteBtn) {
             when (this.visibility) {
@@ -54,6 +54,7 @@ class FactItem(
     fun bindItem(item: CityFact) {
         this.item = item
         with(binding) {
+            ViewCompat.setTransitionName(ivFactItemImg, "fact_${item.id}")
             tvFactItemTitle.text = item.title
             item.content.let { tvFactItemContent.text = it }
             with(ivFactItemImg) {

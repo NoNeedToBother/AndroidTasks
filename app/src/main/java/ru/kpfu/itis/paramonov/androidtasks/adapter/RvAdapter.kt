@@ -2,6 +2,7 @@ package ru.kpfu.itis.paramonov.androidtasks.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -17,11 +18,12 @@ import ru.kpfu.itis.paramonov.androidtasks.model.Model
 import ru.kpfu.itis.paramonov.androidtasks.ui.holders.BottomSheetDisplayBtnItem
 import ru.kpfu.itis.paramonov.androidtasks.ui.holders.DateItem
 import ru.kpfu.itis.paramonov.androidtasks.ui.holders.FactItem
+import ru.kpfu.itis.paramonov.androidtasks.util.CityFactsRepository
 import java.lang.RuntimeException
 
 class RvAdapter(
     private val onBsdButtonClicked: () -> Unit,
-    private val onFactClicked: ((CityFact) -> Unit),
+    private val onFactClicked: (View, CityFact) -> Unit,
     private val onLikeClicked: ((Int, CityFact) -> Unit),
     private val onDeleteClicked: (Int, CityFact) -> Unit,
     private val enableDeleteButton: Boolean
@@ -96,6 +98,7 @@ class RvAdapter(
 
     fun addItem(position: Int, item: CityFact) {
         factList.add(position, item)
+        CityFactsRepository.updateCurrentModels(factList)
         for (pos in position .. factList.size) {
             notifyItemChanged(pos)
         }
@@ -103,6 +106,7 @@ class RvAdapter(
 
     fun deleteItem(position: Int) : CityFact{
         val fact = factList.removeAt(position)
+        CityFactsRepository.updateCurrentModels(factList)
         notifyItemRemoved(position)
         return fact as CityFact
     }

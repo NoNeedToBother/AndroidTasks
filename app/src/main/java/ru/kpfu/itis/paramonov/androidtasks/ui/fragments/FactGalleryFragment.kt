@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -39,7 +41,11 @@ class FactGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
         initRecyclerView()
+        (view.parent as? ViewGroup?)?.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
     }
 
     private fun initRecyclerView() {
@@ -69,7 +75,7 @@ class FactGalleryFragment : Fragment() {
                     layoutManager = GridLayoutManager(context, 2).apply {
                         spanSizeLookup = object : SpanSizeLookup() {
                             override fun getSpanSize(position: Int): Int {
-                                return if (position == 1 || (position - 1) % 9 == 0) 2
+                                return if (position == 0 || (position - 1) % 9 == 0) 2
                                 else 1
                             }
                         }
@@ -125,12 +131,12 @@ class FactGalleryFragment : Fragment() {
         }
     }
 
-    private fun onFactClicked(fact : CityFact) {
-        (requireActivity() as MainActivity).goToScreen(
-            FactFragment.newInstance(fact),
-            FactFragment.FACT_FRAGMENT_TAG,
-            true
-        )
+    private fun onFactClicked(view: View, fact : CityFact) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .addSharedElement(view, view.transitionName)
+            .replace(R.id.main_activity_container, FactFragment.newInstance(fact, view.transitionName), FactFragment.FACT_FRAGMENT_TAG)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun onLikeClicked(position : Int, fact : CityFact) {

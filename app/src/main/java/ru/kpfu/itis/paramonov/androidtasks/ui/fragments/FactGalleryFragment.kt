@@ -22,7 +22,9 @@ import ru.kpfu.itis.paramonov.androidtasks.util.CityFactsRepository
 import ru.kpfu.itis.paramonov.androidtasks.adapter.RvAdapter
 import ru.kpfu.itis.paramonov.androidtasks.util.ParamsKey
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentFactGalleryBinding
+import ru.kpfu.itis.paramonov.androidtasks.model.BsdButton
 import ru.kpfu.itis.paramonov.androidtasks.model.CityFact
+import ru.kpfu.itis.paramonov.androidtasks.model.Date
 
 class FactGalleryFragment : Fragment() {
     private var _binding: FragmentFactGalleryBinding? = null
@@ -57,6 +59,8 @@ class FactGalleryFragment : Fragment() {
                     return
                 }
 
+                val models = CityFactsRepository.getFactsList(it)
+
                 val layoutManager : LayoutManager
 
                 if (it <= 12) {
@@ -75,7 +79,7 @@ class FactGalleryFragment : Fragment() {
                     layoutManager = GridLayoutManager(context, 2).apply {
                         spanSizeLookup = object : SpanSizeLookup() {
                             override fun getSpanSize(position: Int): Int {
-                                return if (position == 0 || (position - 1) % 9 == 0) 2
+                                return if (models[position] is Date || models[position] is BsdButton) 2
                                 else 1
                             }
                         }
@@ -90,7 +94,7 @@ class FactGalleryFragment : Fragment() {
                 }
                 rvCityFacts.layoutManager = layoutManager
                 rvCityFacts.adapter = rvAdapter
-                rvAdapter?.setItems(CityFactsRepository.getFactsList(it))
+                rvAdapter?.setItems(models)
             }
         }
     }

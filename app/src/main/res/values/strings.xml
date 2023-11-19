@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="create_notif">Создать уведомление</string>
+    <string name="notif_settings">Настройки уведомлений</string>
+    <string name="coroutines_settings">Настройки корутин</string>
 </resources>

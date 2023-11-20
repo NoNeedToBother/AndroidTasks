@@ -14,4 +14,9 @@
     <string name="notif_content">Содержание уведомления</string>
     <string name="enter_content">Введите содержание</string>
     <string name="default_notification_channel_id">notification_channel</string>
+    <string name="agree">Согласен</string>
+    <string name="enable_notifications">Позвольте отправлять уведомления</string>
+    <string name="enable_notif_info">Без разрешения на отправку уведомлений приложение не сможет отправлять уведомления</string>
+    <string name="go_to_settings">Перейти к настройкам</string>
+    <string name="deny">Отказаться</string>
 </resources>

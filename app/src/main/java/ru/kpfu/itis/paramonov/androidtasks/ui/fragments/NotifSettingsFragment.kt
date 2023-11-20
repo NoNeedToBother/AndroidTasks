@@ -29,7 +29,6 @@ class NotifSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        Toast.makeText(context, NotificationConfig.visibility.toString(), Toast.LENGTH_LONG).show()
     }
 
     private fun init() {

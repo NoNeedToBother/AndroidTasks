@@ -1,12 +1,22 @@
 package ru.kpfu.itis.paramonov.androidtasks
 
-import android.app.NotificationManager
+import android.Manifest
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.Settings
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ActivityMainBinding
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler
 
@@ -19,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        checkPermission()
         NotificationHandler(this).createNotificationChannels()
 
         findViewById<BottomNavigationView>(R.id.bnv_main).apply {
@@ -26,12 +37,79 @@ class MainActivity : AppCompatActivity() {
                     as NavHostFragment).navController
             setupWithNavController(controller)
         }
+    }
 
+    private fun checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                requestNotificationPermissionWithRationale()
+            }
+        }
+    }
+
+    private fun requestNotificationPermissionWithRationale() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+            Snackbar.make(binding.root, R.string.enable_notifications, Snackbar.LENGTH_LONG)
+                .setAction(R.string.agree) {
+                    requestNotificationPermission()
+                }
+                .show()
+        } else {
+            requestNotificationPermission()
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), NOTIFICATIONS_PERMISSION_REQ_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        var allowed = false
+
+        when(requestCode) {
+            NOTIFICATIONS_PERMISSION_REQ_CODE -> {
+                allowed = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            }
+        }
+
+        if (!allowed) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+                requestNotificationPermissionWithRationale()
+            } else {
+                requestNotificationPermissionFromSettings()
+            }
+        }
+
+    }
+
+    private fun requestNotificationPermissionFromSettings() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.enable_notifications))
+            .setMessage(getString(R.string.enable_notif_info))
+            .setPositiveButton(R.string.go_to_settings) { p0, p1 -> openApplicationSettings() }
+            .show()
+    }
+
+    private fun openApplicationSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
+        startActivity(intent)
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val NOTIFICATIONS_PERMISSION_REQ_CODE = 1
     }
 }

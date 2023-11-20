@@ -3,4 +3,15 @@
     <string name="create_notif">Создать уведомление</string>
     <string name="notif_settings">Настройки уведомлений</string>
     <string name="coroutines_settings">Настройки корутин</string>
+    <string name="importance">Важность: </string>
+    <string name="visibility">"Приватность: "</string>
+    <string name="enable_long_text_display">Отображение длинного текста</string>
+    <string name="enable_options">Отображение кнопок</string>
+    <string name="exception_importance">No such importance value</string>
+    <string name="exception_visibility">No such visibility value</string>
+    <string name="notif_title">Заголовок уведомления</string>
+    <string name="enter_title">Введите заголовок</string>
+    <string name="notif_content">Содержание уведомления</string>
+    <string name="enter_content">Введите содержание</string>
+    <string name="default_notification_channel_id">notification_channel</string>
 </resources>

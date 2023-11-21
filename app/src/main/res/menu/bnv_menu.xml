@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/coroutines_fragment"
-        android:icon="@drawable/coroutines_bnv_icon"
+        android:icon="@drawable/icon_settings"
         android:title="@string/coroutines_settings"
         />
 </menu>

@@ -17,6 +17,10 @@
     <string name="agree">Согласен</string>
     <string name="enable_notifications">Позвольте отправлять уведомления</string>
     <string name="enable_notif_info">Без разрешения на отправку уведомлений приложение не сможет отправлять уведомления</string>
-    <string name="go_to_settings">Перейти к настройкам</string>
+    <string name="go_to_settings">Настройки</string>
     <string name="deny">Отказаться</string>
+    <string name="open_with_surprise">Сюрприз</string>
+    <string name="surprise">Сюрприз!</string>
+    <string name="unsupported_action">Unsupported action</string>
+    <string name="settings">Настройки</string>
 </resources>

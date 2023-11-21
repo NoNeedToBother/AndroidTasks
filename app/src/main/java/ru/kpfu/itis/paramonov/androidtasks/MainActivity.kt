@@ -18,7 +18,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ActivityMainBinding
+import ru.kpfu.itis.paramonov.androidtasks.ui.fragments.NotifSettingsFragment
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler
+import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION
+import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION_SETTINGS
+import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION_TOAST
+import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -36,6 +41,27 @@ class MainActivity : AppCompatActivity() {
             val controller = (supportFragmentManager.findFragmentById(R.id.main_activity_container)
                     as NavHostFragment).navController
             setupWithNavController(controller)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val action = intent?.getStringExtra(NOTIFICATION_INTENT_ACTION)
+        action?.let {
+            when(it) {
+                NOTIFICATION_INTENT_ACTION_TOAST -> {
+                    Toast.makeText(this, R.string.surprise, Toast.LENGTH_LONG).show()
+                }
+
+                NOTIFICATION_INTENT_ACTION_SETTINGS -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.main_activity_container, NotifSettingsFragment())
+                        .commit()
+                }
+
+                else -> throw RuntimeException(getString(R.string.unsupported_action))
+            }
         }
     }
 

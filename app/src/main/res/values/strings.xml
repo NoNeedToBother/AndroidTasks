@@ -23,4 +23,10 @@
     <string name="surprise">Сюрприз!</string>
     <string name="unsupported_action">Unsupported action</string>
     <string name="settings">Настройки</string>
+    <string name="async">async</string>
+    <string name="stop_on_background">Stop on background</string>
+    <string name="execute">Выполнить</string>
+    <string name="coroutines_amount">Количество корутин</string>
+    <string name="done">Done</string>
+    <string name="job_done">My job here is done</string>
 </resources>

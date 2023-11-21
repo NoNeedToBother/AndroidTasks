@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentStartBinding
+import ru.kpfu.itis.paramonov.androidtasks.model.NotificationConfig
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler
 
 class StartFragment : Fragment() {
@@ -38,7 +39,9 @@ class StartFragment : Fragment() {
                 val notificationHandler = NotificationHandler(requireContext())
                 notificationHandler.createNotification(
                     etTitle.text.toString(),
-                    etContent.text.toString()
+                    etContent.text.toString(),
+                    NotificationConfig.hasOptions,
+                    NotificationConfig.hasLongText
                 )
             }
         }

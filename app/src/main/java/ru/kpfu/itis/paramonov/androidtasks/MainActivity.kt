@@ -13,12 +13,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ActivityMainBinding
 import ru.kpfu.itis.paramonov.androidtasks.ui.fragments.NotifSettingsFragment
+import ru.kpfu.itis.paramonov.androidtasks.util.CoroutineHandler
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION_SETTINGS
@@ -28,6 +30,8 @@ import java.lang.RuntimeException
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding get() = _binding!!
+
+    private var coroutineHandler = CoroutineHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,6 +131,17 @@ class MainActivity : AppCompatActivity() {
     private fun openApplicationSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
         startActivity(intent)
+    }
+
+    fun executeCoroutines(handler: CoroutineHandler) {
+        coroutineHandler = handler
+        coroutineHandler.execute()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coroutineHandler.notifyActivityStopped()
     }
 
 

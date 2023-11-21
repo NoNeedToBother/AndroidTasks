@@ -40,7 +40,7 @@ class NotificationHandler(private val context: Context) {
         }
     }
 
-    fun createNotification(title: String, content: String) {
+    fun createNotification(title: String, content: String, hasOptions: Boolean, hasLongText: Boolean) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         NotificationCompat.Builder(
@@ -51,9 +51,9 @@ class NotificationHandler(private val context: Context) {
             .setContentText(content)
             .setVisibility(NotificationConfig.visibility.getCode())
             .setDefaultIntent()
-            .setOptions()
+            .setOptions(hasOptions)
             .apply {
-                if (NotificationConfig.hasLongText) {
+                if (hasLongText) {
                     setStyle(NotificationCompat.BigTextStyle().bigText(content))
                 }
 
@@ -72,8 +72,8 @@ class NotificationHandler(private val context: Context) {
         return this.setContentIntent(pIntent)
     }
 
-    private fun NotificationCompat.Builder.setOptions(): NotificationCompat.Builder {
-        if (NotificationConfig.hasOptions) {
+    private fun NotificationCompat.Builder.setOptions(hasOptions: Boolean): NotificationCompat.Builder {
+        if (hasOptions) {
             val settingsIntent = Intent(context, MainActivity::class.java).apply{
                 putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_SETTINGS)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentNotifSettingsBinding
 import ru.kpfu.itis.paramonov.androidtasks.model.Importance
@@ -34,7 +33,7 @@ class NotifSettingsFragment : Fragment() {
     private fun init() {
         populateSpinners()
         setCurrentSettings()
-        setSettingChangedListeners()
+        setOnSettingsChangedListeners()
     }
 
     private fun getOnItemSelectedListenerImportance() = object: OnItemSelectedListener {
@@ -43,9 +42,7 @@ class NotifSettingsFragment : Fragment() {
             saveImportance(Importance.valueOf(importance))
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            //parent?.setSelection(getPositionImportance())
-        }
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
     }
 
     private fun getOnItemSelectedListenerVisibility() = object: OnItemSelectedListener {
@@ -54,9 +51,7 @@ class NotifSettingsFragment : Fragment() {
             saveVisibility(Visibility.valueOf(visibility))
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            //parent?.setSelection(getPositionImportance())
-        }
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
     }
 
     private fun saveImportance(importance: Importance) {
@@ -84,7 +79,7 @@ class NotifSettingsFragment : Fragment() {
         }
     }
 
-    private fun setSettingChangedListeners() {
+    private fun setOnSettingsChangedListeners() {
         with(binding) {
             spinnerImportance.onItemSelectedListener = getOnItemSelectedListenerImportance()
             spinnerVisibility.onItemSelectedListener = getOnItemSelectedListenerVisibility()
@@ -123,6 +118,4 @@ class NotifSettingsFragment : Fragment() {
     private fun getPositionVisibility(): Int {
         return Visibility.values().indexOf(NotificationConfig.visibility)
     }
-
-
 }

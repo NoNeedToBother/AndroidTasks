@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.kpfu.itis.paramonov.androidtasks.model.CoroutineConfig
 import kotlin.random.Random
 
@@ -34,11 +36,13 @@ class CoroutineHandler(private val activity: AppCompatActivity) {
     fun execute() {
         with(activity) {
             job = lifecycleScope.launch() {
-                repeat(coroutineAmount) {
-                    if (async) {
-                        launch { launchCoroutine() }
+                withContext(Dispatchers.IO) {
+                    repeat(coroutineAmount) {
+                        if (async) {
+                            launch { launchCoroutine() }
+                        }
+                        else launchCoroutine()
                     }
-                    else launchCoroutine()
                 }
             }.also { job ->
                 job.invokeOnCompletion {

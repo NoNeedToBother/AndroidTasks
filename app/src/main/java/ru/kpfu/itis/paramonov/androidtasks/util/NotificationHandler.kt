@@ -64,11 +64,7 @@ class NotificationHandler(private val context: Context) {
     private fun NotificationCompat.Builder.setDefaultIntent(): NotificationCompat.Builder {
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val pIntent: PendingIntent = PendingIntent.getActivity(
-            context,
-            NOTIFICATION_INTENT_DEFAULT_REQ_CODE,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT)
+        val pIntent = createPendingIntent(NOTIFICATION_INTENT_DEFAULT_REQ_CODE, intent)
         return this.setContentIntent(pIntent)
     }
 
@@ -78,11 +74,8 @@ class NotificationHandler(private val context: Context) {
                 putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_SETTINGS)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
-            val settingsPendingIntent: PendingIntent = PendingIntent.getActivity(
-                context,
-                NOTIFICATION_INTENT_SETTINGS_REQ_CODE,
-                settingsIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            val settingsPendingIntent =
+                createPendingIntent(NOTIFICATION_INTENT_SETTINGS_REQ_CODE, settingsIntent)
 
             addAction(
                 R.drawable.icon_settings,
@@ -93,11 +86,8 @@ class NotificationHandler(private val context: Context) {
                 putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_TOAST)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
-            val toastPendingIntent: PendingIntent = PendingIntent.getActivity(
-                context,
-                NOTIFICATION_INTENT_TOAST_REQ_CODE,
-                toastIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            val toastPendingIntent =
+                createPendingIntent(NOTIFICATION_INTENT_TOAST_REQ_CODE, toastIntent)
 
             addAction(
                 R.drawable.icon_message,
@@ -107,6 +97,13 @@ class NotificationHandler(private val context: Context) {
         }
         return this
     }
+
+    private fun createPendingIntent(requestCode: Int, intent: Intent) =
+        PendingIntent.getActivity(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
     companion object {
         const val NOTIFICATION_INTENT_DEFAULT_REQ_CODE = 0

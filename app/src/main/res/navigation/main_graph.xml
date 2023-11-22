@@ -8,7 +8,11 @@
     <fragment
         android:id="@+id/start_fragment"
         android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.StartFragment"
-        tools:layout="@layout/fragment_start"/>
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_start_fragment_to_notif_settings_fragment"
+            app:destination="@id/notif_settings_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/notif_settings_fragment"

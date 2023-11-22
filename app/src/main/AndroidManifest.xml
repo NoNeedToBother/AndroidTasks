@@ -32,13 +32,18 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-
                 <data android:host="paramonov" />
-
                 <data android:path="/itis/11-201" />
-
             </intent-filter>
         </activity>
+
+        <receiver android:name=".util.AirplaneModeBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

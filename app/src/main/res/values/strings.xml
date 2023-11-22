@@ -30,4 +30,6 @@
     <string name="done">Done</string>
     <string name="job_done">My job here is done</string>
     <string name="zero_coroutines">Выберите количество корутин</string>
+    <string name="airplane_mode_msg">Airplane mode is enabled, notification and coroutine features are disabled</string>
+    <string name="airplane_mode_on">Airplane mode on</string>
 </resources>

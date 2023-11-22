@@ -2,6 +2,7 @@ package ru.kpfu.itis.paramonov.androidtasks
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -18,11 +20,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.kpfu.itis.paramonov.androidtasks.databinding.ActivityMainBinding
+import ru.kpfu.itis.paramonov.androidtasks.util.AirplaneModeBroadcastReceiver
 import ru.kpfu.itis.paramonov.androidtasks.util.CoroutineHandler
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION_SETTINGS
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler.Companion.NOTIFICATION_INTENT_ACTION_TOAST
+import ru.kpfu.itis.paramonov.androidtasks.util.AirplaneModeBroadcastReceiver.Companion.AIRPLANE_MODE_ON
+import ru.kpfu.itis.paramonov.androidtasks.util.AirplaneModeBroadcastReceiver.Companion.AIRPLANE_MODE_OFF
 import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +35,10 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding get() = _binding!!
 
     private var coroutineHandler = CoroutineHandler(this)
+
+    private var broadcastReceiver: AirplaneModeBroadcastReceiver? = null
+
+    private var isAirplaneModeOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +48,52 @@ class MainActivity : AppCompatActivity() {
         checkPermission()
         NotificationHandler(this).createNotificationChannels()
 
+        broadcastReceiver = AirplaneModeBroadcastReceiver()
+        val filter = IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        registerReceiver(broadcastReceiver, filter)
+
+        broadcastReceiver?.setOnAirplaneModeChangedListener(getOnAirplaneModeChangedListener())
+
+        checkAirplaneModeOnStart()
+
         findViewById<BottomNavigationView>(R.id.bnv_main).apply {
             val controller = (supportFragmentManager.findFragmentById(R.id.main_activity_container)
                     as NavHostFragment).navController
             setupWithNavController(controller)
             checkIntent(intent)
         }
+    }
+
+    private fun checkAirplaneModeOnStart() {
+        isAirplaneModeOn = Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+        if (isAirplaneModeOn) onAirplaneModeOn()
+    }
+
+    private fun getOnAirplaneModeChangedListener() = object : AirplaneModeBroadcastReceiver.OnAirplaneModeChangedListener {
+        override fun onAirplaneModeChanged(airplaneModeStatus: String) {
+            when(airplaneModeStatus) {
+                AIRPLANE_MODE_ON -> onAirplaneModeOn()
+                AIRPLANE_MODE_OFF -> onAirplaneModeOff()
+            }
+        }
+    }
+
+    private fun onAirplaneModeOn() {
+        isAirplaneModeOn = true
+        binding.layoutAirplaneModeOn.visibility = View.VISIBLE
+        findViewById<Button>(R.id.btn_execute_coroutines)?.isEnabled = false
+        findViewById<Button>(R.id.btn_create_notif)?.isEnabled = false
+    }
+
+    private fun onAirplaneModeOff() {
+        isAirplaneModeOn = false
+        binding.layoutAirplaneModeOn.visibility = View.GONE
+        findViewById<Button>(R.id.btn_execute_coroutines)?.isEnabled = true
+        findViewById<Button>(R.id.btn_create_notif)?.isEnabled = true
+    }
+
+    fun isAirplaneModeOn(): Boolean {
+        return isAirplaneModeOn
     }
 
     private fun checkIntent(intent: Intent?) {
@@ -151,6 +200,8 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        unregisterReceiver(broadcastReceiver)
+        broadcastReceiver = null
     }
 
     companion object {

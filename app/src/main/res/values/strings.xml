@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="create_notif">Создать уведомление</string>
+    <string name="notif_settings">Настройки уведомлений</string>
+    <string name="coroutines_settings">Настройки корутин</string>
+    <string name="importance">Важность: </string>
+    <string name="visibility">"Приватность: "</string>
+    <string name="enable_long_text_display">Отображение длинного текста</string>
+    <string name="enable_options">Отображение кнопок</string>
+    <string name="exception_importance">No such importance value</string>
+    <string name="exception_visibility">No such visibility value</string>
+    <string name="notif_title">Заголовок уведомления</string>
+    <string name="enter_title">Введите заголовок</string>
+    <string name="notif_content">Содержание уведомления</string>
+    <string name="enter_content">Введите содержание</string>
+    <string name="default_notification_channel_id">notification_channel</string>
+    <string name="agree">Согласен</string>
+    <string name="enable_notifications">Позвольте отправлять уведомления</string>
+    <string name="enable_notif_info">Без разрешения на отправку уведомлений приложение не сможет отправлять уведомления</string>
+    <string name="go_to_settings">Настройки</string>
+    <string name="deny">Отказаться</string>
+    <string name="open_with_surprise">Сюрприз</string>
+    <string name="surprise">Сюрприз!</string>
+    <string name="unsupported_action">Unsupported action</string>
+    <string name="settings">Настройки</string>
+    <string name="async">async</string>
+    <string name="stop_on_background">Stop on background</string>
+    <string name="execute">Выполнить</string>
+    <string name="coroutines_amount">Количество корутин</string>
+    <string name="done">Done</string>
+    <string name="job_done">My job here is done</string>
+    <string name="zero_coroutines">Выберите количество корутин</string>
+    <string name="airplane_mode_msg">Airplane mode is enabled, notification and coroutine features are disabled</string>
+    <string name="airplane_mode_on">Airplane mode on</string>
 </resources>

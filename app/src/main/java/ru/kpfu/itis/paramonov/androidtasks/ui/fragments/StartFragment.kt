@@ -1,12 +1,10 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.fragments
 
-import android.app.Notification
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentStartBinding
 import ru.kpfu.itis.paramonov.androidtasks.model.NotificationConfig
 import ru.kpfu.itis.paramonov.androidtasks.util.NotificationHandler
@@ -47,8 +45,8 @@ class StartFragment : Fragment() {
         }
     }
 
-    private fun createNotification() {
-
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
-
 }

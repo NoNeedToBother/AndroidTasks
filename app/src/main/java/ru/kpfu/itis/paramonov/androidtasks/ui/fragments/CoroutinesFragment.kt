@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ru.kpfu.itis.paramonov.androidtasks.MainActivity
 import ru.kpfu.itis.paramonov.androidtasks.R
@@ -76,6 +75,10 @@ class CoroutinesFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.btnExecuteCoroutines.setOnClickListener {
+            if (binding.seekBarCoroutines.progress == 0) {
+                Toast.makeText(context, R.string.zero_coroutines, Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             val coroutineHandler = CoroutineHandler(requireActivity() as MainActivity)
             coroutineHandler.setOnExecutionEndedListener(getOnExecutionEndedListener())
             (requireActivity() as MainActivity).executeCoroutines(coroutineHandler)
@@ -85,16 +88,19 @@ class CoroutinesFragment : Fragment() {
     private fun getOnExecutionEndedListener() = object : CoroutineHandler.OnExecutionEndedListener {
         override fun onExecutionEnded(executionStatus: Int) {
             when(executionStatus) {
-                CoroutineHandler.EXECUTION_STATUS_SUCCESS -> {
+                CoroutineHandler.EXECUTION_STATUS_SUCCESS ->
                     NotificationHandler(requireContext()).createNotification(
                         getString(R.string.done),
                         getString(R.string.job_done),
                         hasOptions = false,
                         hasLongText = false
                     )
-                }
             }
         }
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

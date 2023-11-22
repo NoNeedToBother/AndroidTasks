@@ -118,4 +118,9 @@ class NotifSettingsFragment : Fragment() {
     private fun getPositionVisibility(): Int {
         return Visibility.values().indexOf(NotificationConfig.visibility)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

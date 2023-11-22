@@ -29,4 +29,5 @@
     <string name="coroutines_amount">Количество корутин</string>
     <string name="done">Done</string>
     <string name="job_done">My job here is done</string>
+    <string name="zero_coroutines">Выберите количество корутин</string>
 </resources>

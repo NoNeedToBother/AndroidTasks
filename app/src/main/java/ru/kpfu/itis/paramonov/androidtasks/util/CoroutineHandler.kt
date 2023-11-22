@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -47,7 +46,7 @@ class CoroutineHandler(private val activity: AppCompatActivity) {
             }.also { job ->
                 job.invokeOnCompletion {
                     if (it == null) {
-                        Log.e(LOG_COROUTINE_TAG, ALL_COROUTINES_ENDED_MSG)
+                        Log.i(LOG_COROUTINE_TAG, ALL_COROUTINES_ENDED_MSG)
                         listener?.onExecutionEnded(EXECUTION_STATUS_SUCCESS)
                     }
                     when(it) {
@@ -65,13 +64,13 @@ class CoroutineHandler(private val activity: AppCompatActivity) {
     private suspend fun launchCoroutine() {
         delay(getRandomDuration())
         doneCoroutines++
-        Log.e(LOG_COROUTINE_TAG, COROUTINE_ENDED_MSG)
+        Log.i(LOG_COROUTINE_TAG, COROUTINE_ENDED_MSG)
     }
 
     fun notifyActivityStopped() {
         if (stopOnBackground) {
             job?.cancel(CancellationException(CANCELLATION_EXCEPTION_MSG))
-            Log.e(LOG_COROUTINE_TAG, SOME_COROUTINES_ENDED_MSG.format(doneCoroutines))
+            Log.i(LOG_COROUTINE_TAG, SOME_COROUTINES_ENDED_MSG.format(doneCoroutines))
         }
     }
 

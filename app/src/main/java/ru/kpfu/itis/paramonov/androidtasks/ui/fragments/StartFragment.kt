@@ -46,8 +46,7 @@ class StartFragment : Fragment() {
                 notificationHandler.createNotification(
                     etTitle.text.toString(),
                     etContent.text.toString(),
-                    NotificationConfig.hasOptions,
-                    NotificationConfig.hasLongText
+                    default = false
                 )
             }
         }

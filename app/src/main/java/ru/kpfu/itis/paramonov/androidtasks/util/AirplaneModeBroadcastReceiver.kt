@@ -6,7 +6,6 @@ import android.content.Intent
 
 class AirplaneModeBroadcastReceiver: BroadcastReceiver(){
     private var listener: OnAirplaneModeChangedListener? = null
-    var airplaneMode: String = ""
 
     interface OnAirplaneModeChangedListener {
         fun onAirplaneModeChanged(airplaneModeStatus: String)

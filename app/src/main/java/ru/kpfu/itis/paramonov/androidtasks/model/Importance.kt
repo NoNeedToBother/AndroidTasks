@@ -14,4 +14,10 @@ enum class Importance(private val importance: String, private val code: Int) {
     fun getCode(): Int {
         return code
     }
+
+    companion object {
+        fun getDefaultValue(): Importance {
+            return High
+        }
+    }
 }

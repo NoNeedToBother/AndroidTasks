@@ -84,7 +84,7 @@ class CoroutineHandler(private val activity: AppCompatActivity) {
         const val EXECUTION_STATUS_STOPPED = 1
         const val EXECUTION_STATUS_ERROR = 2
 
-        private const val LOG_COROUTINE_TAG = "COROUTINE"
+        private const val LOG_COROUTINE_TAG = "Coroutine"
         private const val COROUTINE_ENDED_MSG = "Coroutine is finished"
         private const val ALL_COROUTINES_ENDED_MSG = "All coroutines are finished"
         private const val SOME_COROUTINES_ENDED_MSG = "%s coroutines are finished"

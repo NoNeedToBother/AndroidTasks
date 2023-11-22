@@ -57,10 +57,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/enable_long_text_display"/>
-            <androidx.appcompat.widget.AppCompatCheckBox
+            <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/chk_box_long_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -72,10 +73,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/enable_options"/>
-            <androidx.appcompat.widget.AppCompatCheckBox
+            <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/chk_box_options"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 

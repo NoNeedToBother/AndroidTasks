@@ -11,6 +11,7 @@ import ru.kpfu.itis.paramonov.androidtasks.MainActivity
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.model.Importance
 import ru.kpfu.itis.paramonov.androidtasks.model.NotificationConfig
+import ru.kpfu.itis.paramonov.androidtasks.model.Visibility
 
 class NotificationHandler(private val context: Context) {
 
@@ -40,24 +41,33 @@ class NotificationHandler(private val context: Context) {
         }
     }
 
-    fun createNotification(title: String, content: String, hasOptions: Boolean, hasLongText: Boolean) {
+    fun createNotification(title: String, content: String, default: Boolean) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        val importance = if (default) Importance.getDefaultValue()
+        else NotificationConfig.importance
+
+        val visibility = if (default) Visibility.getDefaultValue()
+        else NotificationConfig.visibility
+
         NotificationCompat.Builder(
-            context, getNotifChannelId(NotificationConfig.importance)
+            context, getNotifChannelId(importance)
         )
             .setSmallIcon(R.drawable.active_notification)
             .setContentTitle(title)
             .setContentText(content)
-            .setVisibility(NotificationConfig.visibility.getCode())
+            .setVisibility(visibility.getCode())
             .setDefaultIntent()
-            .setOptions(hasOptions)
             .apply {
-                if (hasLongText) {
-                    setStyle(NotificationCompat.BigTextStyle().bigText(content))
+                if (!default) {
+                    if (NotificationConfig.hasLongText) setStyle(
+                        NotificationCompat.BigTextStyle().bigText(content)
+                    )
+                    if (NotificationConfig.hasOptions) setOptions()
                 }
-
-                notificationManager.notify(0, this.build())
+            }
+            .build().also {
+                notificationManager.notify(0, it)
             }
     }
 
@@ -68,33 +78,31 @@ class NotificationHandler(private val context: Context) {
         return this.setContentIntent(pIntent)
     }
 
-    private fun NotificationCompat.Builder.setOptions(hasOptions: Boolean): NotificationCompat.Builder {
-        if (hasOptions) {
-            val settingsIntent = Intent(context, MainActivity::class.java).apply{
-                putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_SETTINGS)
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
-            val settingsPendingIntent =
-                createPendingIntent(NOTIFICATION_INTENT_SETTINGS_REQ_CODE, settingsIntent)
-
-            addAction(
-                R.drawable.icon_settings,
-                context.getString(R.string.settings),
-                settingsPendingIntent)
-
-            val toastIntent = Intent(context, MainActivity::class.java).apply {
-                putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_TOAST)
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
-            val toastPendingIntent =
-                createPendingIntent(NOTIFICATION_INTENT_TOAST_REQ_CODE, toastIntent)
-
-            addAction(
-                R.drawable.icon_message,
-                context.getString(R.string.open_with_surprise),
-                toastPendingIntent
-            )
+    private fun NotificationCompat.Builder.setOptions(): NotificationCompat.Builder {
+        val settingsIntent = Intent(context, MainActivity::class.java).apply{
+            putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_SETTINGS)
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
+        val settingsPendingIntent =
+            createPendingIntent(NOTIFICATION_INTENT_SETTINGS_REQ_CODE, settingsIntent)
+
+        addAction(
+            R.drawable.icon_settings,
+            context.getString(R.string.settings),
+            settingsPendingIntent)
+
+        val toastIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra(NOTIFICATION_INTENT_ACTION, NOTIFICATION_INTENT_ACTION_TOAST)
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val toastPendingIntent =
+            createPendingIntent(NOTIFICATION_INTENT_TOAST_REQ_CODE, toastIntent)
+
+        addAction(
+            R.drawable.icon_message,
+            context.getString(R.string.open_with_surprise),
+            toastPendingIntent
+        )
         return this
     }
 

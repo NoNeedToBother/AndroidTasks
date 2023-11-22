@@ -100,8 +100,7 @@ class CoroutinesFragment : Fragment() {
                     NotificationHandler(requireContext()).createNotification(
                         getString(R.string.done),
                         getString(R.string.job_done),
-                        hasOptions = false,
-                        hasLongText = false
+                        default = true
                     )
             }
         }

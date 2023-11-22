@@ -15,4 +15,11 @@ enum class Visibility(private val visibility: String, private val code: Int) {
     fun getCode(): Int {
         return code
     }
+
+    companion object {
+        fun getDefaultValue(): Visibility {
+            return Public
+        }
+    }
+
 }

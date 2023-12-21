@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="enter_email">Введите email</string>
+    <string name="register">Регистрация</string>
+    <string name="sign_in">Войти в аккаунт</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="enter_name">Введите имя</string>
+    <string name="enter_phone_num">Введите номер телефона</string>
+    <string name="password_error">Пароль слишком короткий</string>
+    <string name="email_error">Введите корректный email</string>
+    <string name="phone_num_error">Введите корректный номер телефона</string>
+    <string name="incorrect_info">Введите корректные данные</string>
+    <string name="phone_exists">Пользователь с таким номером уже существует</string>
+    <string name="email_exists">Пользователь с такой электронной почтой уже существует</string>
+    <string name="login_error">Такого пользователя не существует</string>
 </resources>

@@ -24,9 +24,9 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding: FragmentRegisterBinding get() = _binding!!
 
-    private val userDao = ServiceLocator.getDbInstance().userDao
-
-    private var enableRegistration = false
+    private var correctPassword = false
+    private var correctEmail = false
+    private var correctPhoneNum = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +50,7 @@ class RegisterFragment : Fragment() {
     private fun setOnClickListeners() {
         with(binding) {
             btnRegister.setOnClickListener {
-                if (!enableRegistration) {
+                if (!(correctEmail && correctPhoneNum && correctPassword)) {
                     showToast(R.string.incorrect_info)
                     return@setOnClickListener
                 }
@@ -70,7 +70,7 @@ class RegisterFragment : Fragment() {
 
                 val user = User(name, phoneNumber, email, PasswordUtil.encrypt(password))
                 lifecycleScope.launch(Dispatchers.IO) {
-                    userDao.saveUser(UserEntity.getEntity(user))
+                    ServiceLocator.getDbInstance().userDao.saveUser(UserEntity.getEntity(user))
                 }
                 findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
             }
@@ -80,7 +80,7 @@ class RegisterFragment : Fragment() {
     private fun checkPhoneNumber(phoneNumber: String): Boolean {
         var res = true
         lifecycleScope.launch(Dispatchers.IO) {
-            val userEntity = userDao.getUserByPhoneNumber(phoneNumber)
+            val userEntity = ServiceLocator.getDbInstance().userDao.getUserByPhoneNumber(phoneNumber)
             if (userEntity != null) {
                 res = false
             }
@@ -91,7 +91,7 @@ class RegisterFragment : Fragment() {
     private fun checkEmail(email: String): Boolean {
         var res = true
         lifecycleScope.launch(Dispatchers.IO) {
-            val userEntity = userDao.getUserByEmail(email)
+            val userEntity = ServiceLocator.getDbInstance().userDao.getUserByEmail(email)
             if (userEntity != null) res = false
         }
         return res
@@ -102,11 +102,11 @@ class RegisterFragment : Fragment() {
             etPassword.addTextChangedListener(getTextWatcher {
                 with (it.toString()) {
                     if (length < MIN_PASSWORD_LEN) {
-                        enableRegistration = false
+                        correctPassword = false
                         etPassword.error = getString(R.string.password_error)
                     }
                     else {
-                        enableRegistration = true
+                        correctPassword = true
                         etPassword.error = null
                     }
                 }
@@ -114,17 +114,20 @@ class RegisterFragment : Fragment() {
 
             etEmail.addTextChangedListener(getTextWatcher {
                 if (!Patterns.EMAIL_ADDRESS.matcher(it.toString()).matches()) {
-                    enableRegistration = false
+                    correctEmail = false
                     etEmail.error = getString(R.string.email_error)
-                } else etEmail.error = null
+                } else {
+                    correctEmail = true
+                    etEmail.error = null
+                }
             })
 
             etPhoneNum.addTextChangedListener(getTextWatcher {
                 if (!Patterns.PHONE.matcher(it.toString()).matches()) {
-                    enableRegistration = false
+                    correctPhoneNum = false
                     etPhoneNum.error = getString(R.string.phone_num_error)
                 } else {
-                    enableRegistration = true
+                    correctPhoneNum = true
                     etPhoneNum.error = null
                 }
             })

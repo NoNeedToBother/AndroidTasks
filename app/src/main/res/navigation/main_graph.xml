@@ -27,5 +27,24 @@
     <fragment
         android:id="@+id/filmsFragment"
         android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.FilmsFragment"
-        android:label="FilmsFragment" />
+        android:label="FilmsFragment" >
+        <action
+            android:id="@+id/action_filmsFragment_to_addFilmFragment"
+            app:destination="@id/addFilmFragment" />
+        <action
+            android:id="@+id/action_filmsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFilmFragment"
+        android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.AddFilmFragment"
+        android:label="AddFilmFragment" >
+        <action
+            android:id="@+id/action_addFilmFragment_to_filmsFragment"
+            app:destination="@id/filmsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.ProfileFragment"
+        android:label="ProfileFragment" />
 </navigation>

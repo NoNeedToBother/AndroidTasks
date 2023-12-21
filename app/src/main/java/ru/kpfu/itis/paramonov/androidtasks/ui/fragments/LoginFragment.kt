@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.kpfu.itis.paramonov.androidtasks.R
+import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.FilmEntity
 import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.UserEntity
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentLoginBinding
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentRegisterBinding
@@ -24,10 +25,6 @@ import ru.kpfu.itis.paramonov.androidtasks.util.PasswordUtil
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private var _binding: FragmentLoginBinding? = null
     private val binding: FragmentLoginBinding get() = _binding!!
-
-    private val sharedPreferences = ServiceLocator.getSharedPreferences()
-
-    private val userDao = ServiceLocator.getDbInstance().userDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +58,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 val password = PasswordUtil.encrypt(etPassword.text.toString())
 
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val userEntity = userDao.getUser(email, password)
+                    val userEntity = ServiceLocator.getDbInstance().userDao.getUser(email, password)
 
                     if (userEntity != null) {
                         withContext(Dispatchers.Main) {
@@ -79,14 +76,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun checkSessionUser() {
-        val userId = sharedPreferences.getInt(SHARED_PREF_USER_ID_KEY, NO_USER_ID)
+        val userId = ServiceLocator.getSharedPreferences().getInt(SHARED_PREF_USER_ID_KEY, NO_USER_ID)
         if (userId != NO_USER_ID) {
             findNavController().navigate(R.id.action_loginFragment_to_filmsFragment)
         }
     }
 
     private fun saveUserInSession(userId: Int) {
-        with(sharedPreferences.edit()) {
+        with(ServiceLocator.getSharedPreferences().edit()) {
             putInt(SHARED_PREF_USER_ID_KEY, userId)
             apply()
         }

@@ -13,4 +13,18 @@
     <string name="phone_exists">Пользователь с таким номером уже существует</string>
     <string name="email_exists">Пользователь с такой электронной почтой уже существует</string>
     <string name="login_error">Такого пользователя не существует</string>
+    <string name="film_title">Название фильма</string>
+    <string name="content">Краткое описание</string>
+    <string name="no_films">Здесь пока нет фильмов</string>
+    <string name="enter_film_title">Введите название фильма</string>
+    <string name="enter_release_date">Введите дату выхода</string>
+    <string name="enter_poster_url">Введите URL адрес постера фильма</string>
+    <string name="save">Сохранить</string>
+    <string name="enter_description">Введите описание</string>
+    <string name="date_format_error">Введите дату в формате yyyy-MM-dd</string>
+    <string name="url_error">Введите корректный URL</string>
+    <string name="film_already_exists">Такой фильм уже существует</string>
+    <string name="profile_content_description">Профиль</string>
+    <string name="film_content_description">Добавить фильм</string>
+    <string name="release_date">Дата выхода</string>
 </resources>

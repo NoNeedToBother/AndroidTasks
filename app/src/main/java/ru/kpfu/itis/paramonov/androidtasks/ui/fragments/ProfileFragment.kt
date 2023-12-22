@@ -76,19 +76,16 @@ class ProfileFragment: Fragment() {
                 }
                 val password = etPassword.text.toString()
                 val confirmPassword = etConfirmPassword.text.toString()
-                if (password != confirmPassword) {
-                    showToast(R.string.password_no_match)
-                }
                 lifecycleScope.launch(Dispatchers.IO) {
                     val userEntity = ServiceLocator.getDbInstance().userDao.getUserWithPassword(
-                        getUserId(), PasswordUtil.encrypt(password))
+                        getUserId(), PasswordUtil.encrypt(confirmPassword))
                     if (userEntity.isEmpty()) {
                         withContext(Dispatchers.Main) {
                             showToast(R.string.incorrect_password)
                         }
                     } else {
                         ServiceLocator.getDbInstance().userDao.updateUserPassword(
-                            PasswordUtil.encrypt(confirmPassword), getUserId())
+                            PasswordUtil.encrypt(password), getUserId())
                     }
                 }
             }

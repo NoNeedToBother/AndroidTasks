@@ -49,7 +49,11 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filmInfoFragment"
         android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.FilmInfoFragment"

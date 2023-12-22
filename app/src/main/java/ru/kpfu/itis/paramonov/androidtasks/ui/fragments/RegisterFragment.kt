@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.UserEntity
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentRegisterBinding
@@ -55,47 +56,43 @@ class RegisterFragment : Fragment() {
                     return@setOnClickListener
                 }
                 val phoneNumber = etPhoneNum.text.toString()
-                if (!checkPhoneNumber(phoneNumber)) {
-                    showToast(R.string.phone_exists)
-                    return@setOnClickListener
-                }
-                val email = etEmail.text.toString()
-                if (!checkEmail(email)) {
-                    showToast(R.string.email_exists)
-                    return@setOnClickListener
-                }
-
-                val name = etName.text.toString()
-                val password = etPassword.text.toString()
-
-                val user = User(name, phoneNumber, email, PasswordUtil.encrypt(password))
                 lifecycleScope.launch(Dispatchers.IO) {
-                    ServiceLocator.getDbInstance().userDao.saveUser(UserEntity.getEntity(user))
+                    var res = true
+                    var entities = ServiceLocator.getDbInstance().userDao.getUserByPhoneNumber(phoneNumber)
+                    if (entities.isNotEmpty()) {
+                        res = false
+                    }
+                    if (!res) {
+                        withContext(Dispatchers.Main) {
+                            showToast(R.string.phone_exists)
+                        }
+                    } else {
+                        res = true
+                        val email = etEmail.text.toString()
+                        entities = ServiceLocator.getDbInstance().userDao.getUserByEmail(email)
+                        if (entities.isNotEmpty()) res = false
+                        if (!res) {
+                            withContext(Dispatchers.Main) {
+                                showToast(R.string.email_exists)
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                val name = etName.text.toString()
+                                val password = etPassword.text.toString()
+
+                                val user = User(name, phoneNumber, email, PasswordUtil.encrypt(password))
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    ServiceLocator.getDbInstance().userDao.saveUser(UserEntity.getEntity(user))
+                                }
+                                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+                            }
+                        }
+                    }
                 }
-                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
             }
         }
     }
 
-    private fun checkPhoneNumber(phoneNumber: String): Boolean {
-        var res = true
-        lifecycleScope.launch(Dispatchers.IO) {
-            val userEntity = ServiceLocator.getDbInstance().userDao.getUserByPhoneNumber(phoneNumber)
-            if (userEntity != null) {
-                res = false
-            }
-        }
-        return res
-    }
-
-    private fun checkEmail(email: String): Boolean {
-        var res = true
-        lifecycleScope.launch(Dispatchers.IO) {
-            val userEntity = ServiceLocator.getDbInstance().userDao.getUserByEmail(email)
-            if (userEntity != null) res = false
-        }
-        return res
-    }
 
     private fun setOnTextChangedListeners() {
         with(binding) {

@@ -31,4 +31,13 @@
     <string name="standard_film_rating">Ваш рейтинг: %1$d</string>
     <string name="standard_avg_rating">Средний рейтинг: %1$s</string>
     <string name="incorrect_date">Введите корректную дату</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="change_password">Сменить пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="save_password">Сохранить пароль</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="save_phone">Сохранить номер телефона</string>
+    <string name="delete_account">Удалить аккаунт</string>
+    <string name="incorrect_password">Неправильный пароль</string>
+    <string name="password_no_match">Пароли не совпадают</string>
 </resources>

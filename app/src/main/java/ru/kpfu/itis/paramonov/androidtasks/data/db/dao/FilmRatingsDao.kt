@@ -9,7 +9,7 @@ import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.FilmRatingEntity
 @Dao
 interface FilmRatingsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addFilmRating(interactionEntity: FilmRatingEntity)
+    fun addFilmRating(filmRatingEntity: FilmRatingEntity)
 
     @Query("SELECT * from user_film_ratings WHERE user_id = :userId AND film_id = :filmId")
     fun getFilmRating(userId: Int, filmId: Int): FilmRatingEntity?
@@ -25,4 +25,7 @@ interface FilmRatingsDao {
 
     @Query("SELECT rating from user_film_ratings WHERE user_id = :userId")
     fun getUserRatings(userId : Int) : List<Int>
+
+    @Query("SELECT film_id from user_film_ratings WHERE user_id = :userId AND is_liked = 1")
+    fun getUserLikedFilms(userId: Int) : List<Int>
 }

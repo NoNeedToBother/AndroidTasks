@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,12 +18,14 @@ import ru.kpfu.itis.paramonov.androidtasks.adapter.FilmAdapter
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentFilmsBinding
 import ru.kpfu.itis.paramonov.androidtasks.di.ServiceLocator
 import ru.kpfu.itis.paramonov.androidtasks.model.Film
+import ru.kpfu.itis.paramonov.androidtasks.model.LikedFilms
+import ru.kpfu.itis.paramonov.androidtasks.model.RvModel
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamKeys.Companion.NO_USER_ID
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamKeys.Companion.SHARED_PREF_USER_ID_KEY
 
 class FilmsFragment: Fragment() {
     private var _binding: FragmentFilmsBinding? = null
     private val binding: FragmentFilmsBinding get() = _binding!!
-
-    private val filmDao = ServiceLocator.getDbInstance().filmDao
 
     private var adapter: FilmAdapter? = null
 
@@ -47,21 +50,31 @@ class FilmsFragment: Fragment() {
 
     private fun addFilms() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val films = filmDao.getAllFilms()
-                .map {entity ->
+            val rvModels: MutableList<RvModel> = ArrayList()
+            val films = ServiceLocator.getDbInstance().filmDao.getAllFilms()
+                .map { entity ->
                     Film.getFromEntity(entity)
                 }
 
+            val likedFilmIds = ServiceLocator.getDbInstance().filmRatingsDao.getUserLikedFilms(getUserId())
+            if (likedFilmIds.isNotEmpty()) {
+                rvModels.add(LikedFilms())
+            }
+
+            rvModels.addAll(films)
+
             withContext(Dispatchers.Main) {
-                binding.tvNoFilms.visibility = View.GONE
                 if (films.isNotEmpty()) {
+                    binding.tvNoFilms.visibility = View.GONE
                     with(binding) {
                         val adapter = FilmAdapter(
                             context = requireContext(),
                             onFilmClicked = ::onFilmClicked,
-                            onDeleteClicked = ::onDeleteClicked
+                            onDeleteClicked = ::onDeleteClicked,
+                            userId = getUserId(),
+                            lifecycleScope = lifecycleScope
                         )
-                        adapter.setItems(films)
+                        adapter.setItems(rvModels)
                         this@FilmsFragment.adapter = adapter
 
                         val gridLayoutManager = GridLayoutManager(
@@ -69,7 +82,17 @@ class FilmsFragment: Fragment() {
                             2,
                             GridLayoutManager.VERTICAL,
                             false
-                        )
+                        ).apply {
+                            spanSizeLookup = object : SpanSizeLookup() {
+                                override fun getSpanSize(position: Int): Int {
+                                    return when(rvModels[position]) {
+                                        is Film -> 1
+                                        is LikedFilms -> 2
+                                        else -> throw RuntimeException()
+                                    }
+                                }
+                            }
+                        }
 
                         rvMovies.layoutManager = gridLayoutManager
                         rvMovies.adapter = adapter
@@ -81,6 +104,13 @@ class FilmsFragment: Fragment() {
         }
     }
 
+    private fun getUserId(): Int {
+        return ServiceLocator.getSharedPreferences().getInt(
+            SHARED_PREF_USER_ID_KEY,
+            NO_USER_ID
+        )
+    }
+
     private fun onFilmClicked(film: Film) {
         findNavController().navigate(
             R.id.action_filmsFragment_to_filmInfoFragment,
@@ -88,11 +118,13 @@ class FilmsFragment: Fragment() {
         )
     }
 
-    private fun onDeleteClicked(position: Int) {
-        val film = adapter?.deleteItem(position)
-        lifecycleScope.launch(Dispatchers.IO) {
-            film?.id?.let {
-                ServiceLocator.getDbInstance().filmDao.deleteFilmById(it)
+    private fun onDeleteClicked(fromLiked: Boolean, position: Int) {
+        if (!fromLiked) {
+            val film = adapter?.deleteItem(position)
+            lifecycleScope.launch(Dispatchers.IO) {
+                film?.id?.let {
+                    ServiceLocator.getDbInstance().filmDao.deleteFilmById(it)
+                }
             }
         }
     }

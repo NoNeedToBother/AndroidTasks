@@ -8,7 +8,17 @@ data class Film(
     val description: String,
     val releaseDate: String,
     val posterUrl: String
-) {
+): RvModel(){
+    private var isFromLikedList = false
+
+    fun setFromLiked(): Film {
+        isFromLikedList = true
+        return this
+    }
+
+    fun isFromLiked(): Boolean {
+        return isFromLikedList
+    }
     companion object {
         fun getFromEntity(entity: FilmEntity): Film {
             return Film(entity.filmId,

@@ -23,4 +23,7 @@ interface FilmDao {
 
     @Query("SELECT * FROM films WHERE film_title = :title AND film_release_date = :date")
     fun getFilmByTitleAndDate(title: String, date: String): FilmEntity?
+
+    @Query("SELECT * FROM films WHERE film_id IN (:filmIds)")
+    fun getFilmsById(filmIds: List<Int>): List<FilmEntity>
 }

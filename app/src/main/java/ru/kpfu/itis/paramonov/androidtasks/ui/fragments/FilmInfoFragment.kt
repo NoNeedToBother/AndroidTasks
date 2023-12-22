@@ -85,7 +85,9 @@ class FilmInfoFragment: Fragment() {
         binding.seekbarRating.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    filmId?.let { onRatingUpdated(userId, filmId, progress)}
+                    withContext(Dispatchers.Main) {
+                        filmId?.let { onRatingUpdated(userId, filmId, progress)}
+                    }
                 }
             }
 
@@ -169,9 +171,26 @@ class FilmInfoFragment: Fragment() {
         with(binding) {
             tvFilmRating.text = getString(R.string.standard_film_rating, rating)
             lifecycleScope.launch(Dispatchers.IO) {
-                ServiceLocator.getDbInstance().filmRatingsDao.updateMovieRating(userId, filmId, rating)
-                val ratings = ServiceLocator.getDbInstance().filmRatingsDao.getFilmRatings(filmId)
-                setAverageRating(ratings)
+                val filmRating = ServiceLocator.getDbInstance().filmRatingsDao.getFilmRating(userId, filmId)
+                if (filmRating == null) {
+                    ServiceLocator.getDbInstance().filmRatingsDao.addFilmRating(
+                        FilmRatingEntity.getEntity(
+                            userId = userId,
+                            filmId = filmId,
+                            rating = rating,
+                            isLiked = null
+                        )
+                    )
+                } else {
+                    ServiceLocator.getDbInstance().filmRatingsDao.updateMovieRating(
+                        userId,
+                        filmId,
+                        rating
+                    )
+                    val ratings =
+                        ServiceLocator.getDbInstance().filmRatingsDao.getFilmRatings(filmId)
+                    setAverageRating(ratings)
+                }
             }
         }
     }

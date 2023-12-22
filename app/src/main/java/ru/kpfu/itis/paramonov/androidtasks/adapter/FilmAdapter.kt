@@ -105,7 +105,7 @@ class FilmAdapter(
     }
 
     fun setFilms(films: List<Film>) {
-        val models = ArrayList(films)
+        val models = ArrayList(modelList)
             .filter { model -> model !is Film } as MutableList
 
         models.addAll(films)

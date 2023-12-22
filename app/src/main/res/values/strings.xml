@@ -40,4 +40,7 @@
     <string name="delete_account">Удалить аккаунт</string>
     <string name="incorrect_password">Неправильный пароль</string>
     <string name="password_no_match">Пароли не совпадают</string>
+    <string name="standard_name">Имя: %1$s</string>
+    <string name="standard_email">Электронная почта: %1$s</string>
+    <string name="standard_phone">Номер телефона: %1$s</string>
 </resources>

@@ -59,9 +59,9 @@ class ProfileFragment: Fragment() {
                 }
 
                 withContext(Dispatchers.Main) {
-                    etEmail.hint = user?.email
-                    etName.hint = user?.email
-                    etPhone.hint = user?.phoneNumber
+                    etEmail.hint = getString(R.string.standard_email, user?.email)
+                    etName.hint = getString(R.string.standard_name, user?.name)
+                    etPhone.hint = getString(R.string.standard_phone, user?.phoneNumber)
                 }
             }
         }

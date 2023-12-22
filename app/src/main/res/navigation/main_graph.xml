@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment_to_staggeredGridFragment"
+            app:destination="@id/staggeredGridFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/staggeredGridFragment"
+        android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.StaggeredGridFragment"
+        android:label="StaggeredGridFragment" />
+</navigation>

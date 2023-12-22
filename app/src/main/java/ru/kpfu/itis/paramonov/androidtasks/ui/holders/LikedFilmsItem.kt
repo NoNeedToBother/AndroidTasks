@@ -27,6 +27,7 @@ class LikedFilmsItem(
     private var filmList = mutableListOf<Film>()
 
     fun onBind() {
+        filmList.clear()
         lifecycleScope.launch(Dispatchers.IO) {
             val liked = ServiceLocator.getDbInstance().filmRatingsDao.getUserLikedFilms(userId)
 

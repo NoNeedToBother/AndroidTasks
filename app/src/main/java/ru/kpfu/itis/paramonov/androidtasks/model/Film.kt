@@ -11,6 +11,8 @@ data class Film(
 ): RvModel(){
     private var isFromLikedList = false
 
+    private var rating: Int? = null
+
     fun setFromLiked(): Film {
         isFromLikedList = true
         return this
@@ -18,6 +20,15 @@ data class Film(
 
     fun isFromLiked(): Boolean {
         return isFromLikedList
+    }
+
+    fun setRating(rating: Int) {
+        this.rating = rating
+    }
+
+    fun getRating(): Int {
+        return if (rating == null) 0
+        else rating as Int
     }
     companion object {
         fun getFromEntity(entity: FilmEntity): Film {

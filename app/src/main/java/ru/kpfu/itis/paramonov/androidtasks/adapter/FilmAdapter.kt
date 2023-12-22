@@ -97,4 +97,19 @@ class FilmAdapter(
         }
         return res
     }
+
+    fun getFilms(): List<Film> {
+        return ArrayList(modelList)
+            .filter { film -> film is Film }
+            .map { film -> film as Film }
+    }
+
+    fun setFilms(films: List<Film>) {
+        val models = ArrayList(films)
+            .filter { model -> model !is Film } as MutableList
+
+        models.addAll(films)
+        setItems(models)
+        notifyDataSetChanged()
+    }
 }

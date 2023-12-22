@@ -1,5 +1,6 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,11 @@ import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.FilmEntity
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentAddFilmBinding
 import ru.kpfu.itis.paramonov.androidtasks.di.ServiceLocator
 import ru.kpfu.itis.paramonov.androidtasks.model.Film
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamKeys.Companion.RELEASE_DATE_FORMAT
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Locale
 
 class AddFilmFragment: Fragment() {
     private var _binding: FragmentAddFilmBinding? = null
@@ -96,8 +102,26 @@ class AddFilmFragment: Fragment() {
                     correctReleaseDate = false
                     etReleaseDate.error = getString(R.string.date_format_error)
                 } else {
-                    correctReleaseDate = true
-                    etReleaseDate.error = null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        try {
+                            LocalDate.parse(etReleaseDate.text.toString())
+                            correctReleaseDate = true
+                            etReleaseDate.error = null
+                        } catch (e: Exception) {
+                            correctReleaseDate = false
+                            etReleaseDate.error = getString(R.string.incorrect_date)
+                        }
+                    } else {
+                        try {
+                            SimpleDateFormat(RELEASE_DATE_FORMAT, Locale.UK).parse(
+                                etReleaseDate.text.toString())
+                            correctReleaseDate = true
+                            etReleaseDate.error = null
+                        } catch (e: Exception) {
+                            correctReleaseDate = false
+                            etReleaseDate.error = getString(R.string.incorrect_date)
+                        }
+                    }
                 }
             })
 

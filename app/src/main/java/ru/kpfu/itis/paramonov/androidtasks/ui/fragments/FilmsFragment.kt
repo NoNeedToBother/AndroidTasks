@@ -152,15 +152,24 @@ class FilmsFragment: Fragment() {
                                         film.id?.let {
                                             val ratingInfo =
                                                 ServiceLocator.getDbInstance().filmRatingsDao.getUserFilmRating(getUserId(), it)
-                                            ratingInfo?.filmId?.let {
-                                                val filmEntity = ServiceLocator.getDbInstance().filmDao.getFilmById(ratingInfo.filmId)
-                                                filmEntity?.let {
-                                                    val newFilm = Film.getFromEntity(filmEntity)
-                                                    if (ratingInfo.rating != null) {
-                                                        newFilm.setRating(ratingInfo.rating)
-                                                    } else newFilm.setRating(0)
-                                                    filmRatings.add(newFilm)
+                                            if(ratingInfo != null) {
+                                                ratingInfo.filmId?.let {
+                                                    val filmEntity =
+                                                        ServiceLocator.getDbInstance().filmDao.getFilmById(
+                                                            ratingInfo.filmId
+                                                        )
+                                                    filmEntity?.let {
+                                                        val newFilm = Film.getFromEntity(filmEntity)
+                                                        if (ratingInfo.rating != null) {
+                                                            newFilm.setRating(ratingInfo.rating)
+                                                        } else newFilm.setRating(0)
+                                                        filmRatings.add(newFilm)
+                                                    }
                                                 }
+                                            } else {
+                                                val newFilm = Film(film.id, film.title, film.description, film.releaseDate, film.posterUrl)
+                                                newFilm.setRating(0)
+                                                filmRatings.add(newFilm)
                                             }
                                         }
                                     }
@@ -179,15 +188,24 @@ class FilmsFragment: Fragment() {
                                     film.id?.let {
                                         val ratingInfo =
                                             ServiceLocator.getDbInstance().filmRatingsDao.getUserFilmRating(getUserId(), it)
-                                        ratingInfo?.filmId?.let {
-                                            val filmEntity = ServiceLocator.getDbInstance().filmDao.getFilmById(ratingInfo.filmId)
-                                            filmEntity?.let {
-                                                val newFilm = Film.getFromEntity(filmEntity)
-                                                if (ratingInfo.rating != null) {
-                                                    newFilm.setRating(ratingInfo.rating)
-                                                } else newFilm.setRating(0)
-                                                filmRatings.add(newFilm)
+                                        if(ratingInfo != null) {
+                                            ratingInfo.filmId?.let {
+                                                val filmEntity =
+                                                    ServiceLocator.getDbInstance().filmDao.getFilmById(
+                                                        ratingInfo.filmId
+                                                    )
+                                                filmEntity?.let {
+                                                    val newFilm = Film.getFromEntity(filmEntity)
+                                                    if (ratingInfo.rating != null) {
+                                                        newFilm.setRating(ratingInfo.rating)
+                                                    } else newFilm.setRating(0)
+                                                    filmRatings.add(newFilm)
+                                                }
                                             }
+                                        } else {
+                                            val newFilm = Film(film.id, film.title, film.description, film.releaseDate, film.posterUrl)
+                                            newFilm.setRating(0)
+                                            filmRatings.add(newFilm)
                                         }
                                     }
                                 }

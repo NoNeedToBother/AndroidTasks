@@ -15,27 +15,8 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-
-        supportFragmentManager.beginTransaction().add(
-            binding.mainActivityContainer.id,
-            StartFragment(),
-            StartFragment.START_FRAGMENT_TAG
-        ).commit()
     }
 
-    public fun goToScreen(
-        destination: Fragment,
-        tag: String?,
-        isAddToBackStack: Boolean,
-    ) {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.mainActivityContainer.id, destination, tag)
-            .apply {
-                if(isAddToBackStack) {
-                    this.addToBackStack(null)
-                }
-            }.commit()
-    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="go">Перейти</string>
+    <string name="empty_amount">Введите число</string>
 </resources>

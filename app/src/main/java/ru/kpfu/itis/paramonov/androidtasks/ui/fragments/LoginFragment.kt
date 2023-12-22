@@ -1,8 +1,6 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.fragments
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.kpfu.itis.paramonov.androidtasks.R
-import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.FilmEntity
-import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.UserEntity
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentLoginBinding
-import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentRegisterBinding
 import ru.kpfu.itis.paramonov.androidtasks.di.ServiceLocator
-import ru.kpfu.itis.paramonov.androidtasks.model.User
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamKeys
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamKeys.Companion.NO_USER_ID
+import ru.kpfu.itis.paramonov.androidtasks.util.ParamKeys.Companion.SHARED_PREF_USER_ID_KEY
 import ru.kpfu.itis.paramonov.androidtasks.util.PasswordUtil
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -87,10 +84,5 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             putInt(SHARED_PREF_USER_ID_KEY, userId)
             apply()
         }
-    }
-
-    companion object {
-        private const val SHARED_PREF_USER_ID_KEY = "user_id"
-        private const val NO_USER_ID = -1
     }
 }

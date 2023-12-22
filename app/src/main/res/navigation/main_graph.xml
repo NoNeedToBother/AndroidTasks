@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_filmsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_filmsFragment_to_filmInfoFragment"
+            app:destination="@id/filmInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFilmFragment"
@@ -47,4 +50,8 @@
         android:id="@+id/profileFragment"
         android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/filmInfoFragment"
+        android:name="ru.kpfu.itis.paramonov.androidtasks.ui.fragments.FilmInfoFragment"
+        android:label="FilmInfoFragment" />
 </navigation>

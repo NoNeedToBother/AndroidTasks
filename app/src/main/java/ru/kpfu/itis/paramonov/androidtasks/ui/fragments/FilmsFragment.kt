@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,7 +51,7 @@ class FilmsFragment: Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val films = filmDao.getAllFilms()
                 .map {entity ->
-                    Film(entity.filmTitle, entity.filmDescription, entity.filmReleaseDate, entity.filmPosterURL)
+                    Film.getFromEntity(entity)
                 }
 
             withContext(Dispatchers.Main) {
@@ -81,7 +82,10 @@ class FilmsFragment: Fragment() {
     }
 
     private fun onFilmClicked(film: Film) {
-
+        findNavController().navigate(
+            R.id.action_filmsFragment_to_filmInfoFragment,
+            bundleOf(BUNDLE_FILM_ID_KEY to film.id)
+        )
     }
 
     private fun onDeleteClicked(film: Film) {
@@ -102,5 +106,9 @@ class FilmsFragment: Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        const val BUNDLE_FILM_ID_KEY = "film_id"
     }
 }

@@ -27,4 +27,7 @@
     <string name="profile_content_description">Профиль</string>
     <string name="film_content_description">Добавить фильм</string>
     <string name="release_date">Дата выхода</string>
+    <string name="standard_release_date">"Дата выхода: %1$s"</string>
+    <string name="standard_film_rating">Ваш рейтинг: %1$d</string>
+    <string name="standard_avg_rating">Средний рейтинг: %1$s</string>
 </resources>

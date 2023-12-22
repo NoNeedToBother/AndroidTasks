@@ -1,7 +1,6 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.holders
 
 import android.content.Context
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.kpfu.itis.paramonov.androidtasks.R
@@ -12,7 +11,7 @@ class FilmItem(
     private val context: Context,
     private val binding: ItemFilmBinding,
     private val onFilmClicked: (Film) -> Unit,
-    private val onDeleteClicked: (Film) -> Unit
+    private val onDeleteClicked: (Int) -> Unit
 ): RecyclerView.ViewHolder(binding.root){
     private var item: Film? = null
 
@@ -24,11 +23,10 @@ class FilmItem(
                 }
             }
 
-            ivDeleteBtn.setOnLongClickListener {
+            ivDeleteBtn.setOnClickListener {
                 item?.let {
-                    onDeleteClicked(it)
+                    onDeleteClicked(adapterPosition)
                 }
-                true
             }
         }
     }

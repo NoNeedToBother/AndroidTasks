@@ -30,4 +30,5 @@
     <string name="standard_release_date">"Дата выхода: %1$s"</string>
     <string name="standard_film_rating">Ваш рейтинг: %1$d</string>
     <string name="standard_avg_rating">Средний рейтинг: %1$s</string>
+    <string name="incorrect_date">Введите корректную дату</string>
 </resources>

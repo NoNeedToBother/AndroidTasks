@@ -1,6 +1,7 @@
 package ru.kpfu.itis.paramonov.androidtasks.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import java.lang.RuntimeException
 class FilmAdapter(
     private val context: Context,
     private val onFilmClicked: (Film) -> Unit,
-    private val onDeleteClicked: (Film) -> Unit
+    private val onDeleteClicked: (Int) -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var filmList = mutableListOf<Film>()
@@ -53,5 +54,12 @@ class FilmAdapter(
     fun setItems(list: List<Film>) {
         filmList.clear()
         filmList.addAll(list)
+    }
+
+    fun deleteItem(position: Int): Film {
+        val res = filmList.removeAt(position)
+        Log.i("BD", res.title)
+        notifyItemRemoved(position)
+        return res
     }
 }

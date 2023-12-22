@@ -1,7 +1,6 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.adapter.FilmAdapter
-import ru.kpfu.itis.paramonov.androidtasks.data.db.entity.FilmEntity
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentFilmsBinding
 import ru.kpfu.itis.paramonov.androidtasks.di.ServiceLocator
 import ru.kpfu.itis.paramonov.androidtasks.model.Film
@@ -26,7 +24,7 @@ class FilmsFragment: Fragment() {
 
     private val filmDao = ServiceLocator.getDbInstance().filmDao
 
-    private val adapter: FilmAdapter? = null
+    private var adapter: FilmAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +62,8 @@ class FilmsFragment: Fragment() {
                             onDeleteClicked = ::onDeleteClicked
                         )
                         adapter.setItems(films)
+                        this@FilmsFragment.adapter = adapter
+
                         val gridLayoutManager = GridLayoutManager(
                             requireContext(),
                             2,
@@ -88,8 +88,13 @@ class FilmsFragment: Fragment() {
         )
     }
 
-    private fun onDeleteClicked(film: Film) {
-
+    private fun onDeleteClicked(position: Int) {
+        val film = adapter?.deleteItem(position)
+        lifecycleScope.launch(Dispatchers.IO) {
+            film?.id?.let {
+                ServiceLocator.getDbInstance().filmDao.deleteFilmById(it)
+            }
+        }
     }
 
     private fun setOnClickListeners() {

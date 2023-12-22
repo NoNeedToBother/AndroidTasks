@@ -1,6 +1,7 @@
 package ru.kpfu.itis.paramonov.androidtasks.ui.holders
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,5 +55,23 @@ class LikedFilmsItem(
                 }
             }
         }
+    }
+
+    fun removeFilm(pos: Int): Film {
+        val res = filmList.removeAt(pos)
+        filmAdapter?.notifyItemRemoved(pos)
+        return res
+    }
+
+    fun notifyFilmDeleted(filmId: Int) {
+        val pos = filmList.indexOfFirst { film -> film.id == filmId }
+        if (pos != -1) {
+            filmList.removeAt(pos)
+            filmAdapter?.notifyItemRemoved(pos)
+        }
+    }
+
+    fun getItemCount(): Int {
+        return filmList.size
     }
 }

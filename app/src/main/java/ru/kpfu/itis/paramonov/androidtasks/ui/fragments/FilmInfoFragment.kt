@@ -140,12 +140,23 @@ class FilmInfoFragment: Fragment() {
             var isLiked = false
 
             if (filmRating != null) {
-                filmRating.liked?.let {
-                    isLiked = !it
+                if (filmRating.liked != null) {
+                    isLiked = !filmRating.liked
                     ServiceLocator.getDbInstance().filmRatingsDao.updateMovieLiked(
                         userId = userId,
                         filmId = filmId,
                         isLiked = isLiked
+                    )
+                }
+                else {
+                    isLiked = true
+                    ServiceLocator.getDbInstance().filmRatingsDao.addFilmRating(
+                        FilmRatingEntity.getEntity(
+                            userId = userId,
+                            filmId = filmId,
+                            rating = null,
+                            isLiked = true
+                        )
                     )
                 }
             } else {

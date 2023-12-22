@@ -21,7 +21,7 @@ interface FilmRatingsDao {
     fun updateMovieLiked(userId: Int, filmId: Int, isLiked: Boolean)
 
     @Query("SELECT rating from user_film_ratings WHERE film_id = :filmId")
-    fun getFilmRatings(filmId : Int) : List<Int?>
+    fun getFilmRatings(filmId : Int) : List<Int>
 
     @Query("SELECT rating from user_film_ratings WHERE user_id = :userId")
     fun getUserRatings(userId : Int) : List<Int>

@@ -1,6 +1,7 @@
 package ru.kpfu.itis.paramonov.androidtasks.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -23,10 +24,11 @@ class FilmAdapter(
     private val lifecycleScope: LifecycleCoroutineScope
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var filmList = mutableListOf<RvModel>()
+    private val modelList = mutableListOf<RvModel>()
+    private var likedFilms: LikedFilmsItem? = null
 
     override fun getItemViewType(position: Int): Int {
-        return when(filmList[position]) {
+        return when(modelList[position]) {
             is Film -> R.layout.item_film
             is LikedFilms -> R.layout.item_liked_films
             else -> throw RuntimeException()
@@ -61,24 +63,38 @@ class FilmAdapter(
     }
 
     override fun getItemCount(): Int {
-        return filmList.size
+        return modelList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder) {
-            is FilmItem -> holder.onBind(filmList[position] as Film)
-            is LikedFilmsItem -> holder.onBind()
+            is FilmItem -> holder.onBind(modelList[position] as Film)
+            is LikedFilmsItem -> {
+                holder.onBind()
+                likedFilms = holder
+            }
         }
     }
 
     fun setItems(list: List<RvModel>) {
-        filmList.clear()
-        filmList.addAll(list)
+        modelList.clear()
+        modelList.addAll(list)
     }
 
-    fun deleteItem(position: Int): Film {
-        val res = filmList.removeAt(position) as Film
-        notifyItemRemoved(position)
+    fun deleteItem(fromLiked: Boolean, position: Int): Film? {
+        val res: Film?
+        if (!fromLiked) {
+            res = modelList.removeAt(position) as Film
+            notifyItemRemoved(position)
+
+            res.id?.let {
+                likedFilms?.notifyFilmDeleted(it)
+            }
+            notifyItemChanged(modelList.indexOfFirst {rvModel -> (rvModel is LikedFilms) } )
+        } else {
+            res = likedFilms?.removeFilm(position)
+            notifyItemChanged(modelList.indexOfFirst {rvModel -> (rvModel is LikedFilms) } )
+        }
         return res
     }
 }

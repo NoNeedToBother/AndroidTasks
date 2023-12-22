@@ -119,11 +119,17 @@ class FilmsFragment: Fragment() {
     }
 
     private fun onDeleteClicked(fromLiked: Boolean, position: Int) {
+        val film = adapter?.deleteItem(fromLiked, position)
         if (!fromLiked) {
-            val film = adapter?.deleteItem(position)
             lifecycleScope.launch(Dispatchers.IO) {
                 film?.id?.let {
                     ServiceLocator.getDbInstance().filmDao.deleteFilmById(it)
+                }
+            }
+        } else {
+            lifecycleScope.launch(Dispatchers.IO) {
+                film?.id?.let {
+                    ServiceLocator.getDbInstance().filmRatingsDao.updateMovieLiked(getUserId(), it, false)
                 }
             }
         }

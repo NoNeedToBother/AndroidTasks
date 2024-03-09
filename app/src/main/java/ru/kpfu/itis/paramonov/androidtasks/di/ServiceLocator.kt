@@ -7,13 +7,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
+import ru.kpfu.itis.paramonov.androidtasks.data.handler.ExceptionHandlerDelegate
 import ru.kpfu.itis.paramonov.androidtasks.data.interceptor.AppIdInterceptor
+import ru.kpfu.itis.paramonov.androidtasks.data.interceptor.MetricInterceptor
 import ru.kpfu.itis.paramonov.androidtasks.data.mapper.WeatherDomainModelMapper
 import ru.kpfu.itis.paramonov.androidtasks.data.remote.OpenWeatherApi
 import ru.kpfu.itis.paramonov.androidtasks.data.repository.WeatherRepositoryImpl
 import ru.kpfu.itis.paramonov.androidtasks.domain.mapper.WeatherUiModelMapper
 import ru.kpfu.itis.paramonov.androidtasks.domain.usecase.GetWeatherDataUseCase
 import ru.kpfu.itis.paramonov.androidtasks.utils.Keys
+import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
+import ru.kpfu.itis.paramonov.androidtasks.utils.ResManagerImpl
 import java.lang.ref.WeakReference
 
 object ServiceLocator {
@@ -25,6 +29,10 @@ object ServiceLocator {
 
     lateinit var getWeatherUseCase: GetWeatherDataUseCase
         private set
+
+    lateinit var exceptionHandlerDelegate: ExceptionHandlerDelegate
+        private set
+
 
     private val dispatcher = Dispatchers.IO
 
@@ -47,7 +55,7 @@ object ServiceLocator {
         weatherRepository = WeatherRepositoryImpl(
             api = weatherApi,
             domainModelMapper = weatherDomainModelMapper,
-            //resManager = ResManager(ctx = ctx),
+            resManager = ResManagerImpl(ctx = ctx),
         )
     }
 
@@ -61,16 +69,9 @@ object ServiceLocator {
 
 
     private fun buildOkHttpClient() {
-        val clientBuilder = OkHttpClient.Builder().addInterceptor(AppIdInterceptor())
-            .addInterceptor { chain ->
-                val newUrl = chain.request().url.newBuilder()
-                    .addQueryParameter(Keys.UNITS_KEY, "metric")
-                    .build()
-
-                val requestBuilder = chain.request().newBuilder().url(newUrl)
-
-                chain.proceed(requestBuilder.build())
-            }
+        val clientBuilder = OkHttpClient.Builder()
+            .addInterceptor(AppIdInterceptor())
+            .addInterceptor(MetricInterceptor())
 
         if (BuildConfig.DEBUG) {
             clientBuilder.addInterceptor(HttpLoggingInterceptor().apply {

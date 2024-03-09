@@ -57,6 +57,8 @@ object ServiceLocator {
             domainModelMapper = weatherDomainModelMapper,
             resManager = ResManagerImpl(ctx = ctx),
         )
+
+        exceptionHandlerDelegate = ExceptionHandlerDelegate(resManager = ResManagerImpl(ctx))
     }
 
     fun initDomainDependencies() {

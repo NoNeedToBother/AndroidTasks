@@ -7,8 +7,9 @@ import ru.kpfu.itis.paramonov.androidtasks.domain.model.WeatherDomainModel
 import ru.kpfu.itis.paramonov.androidtasks.domain.repository.WeatherRepository
 import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
 import java.lang.RuntimeException
+import javax.inject.Inject
 
-class WeatherRepositoryImpl(
+class WeatherRepositoryImpl @Inject constructor(
     private val api: OpenWeatherApi,
     private val domainModelMapper: WeatherDomainModelMapper,
     private val resManager: ResManager,

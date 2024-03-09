@@ -9,8 +9,9 @@ import ru.kpfu.itis.paramonov.androidtasks.data.exceptions.ServerErrorException
 import ru.kpfu.itis.paramonov.androidtasks.data.exceptions.TooManyRequestsException
 import ru.kpfu.itis.paramonov.androidtasks.data.exceptions.UserNotAuthorizedException
 import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
+import javax.inject.Inject
 
-class ExceptionHandlerDelegate(
+class ExceptionHandlerDelegate @Inject constructor(
     private val resManager: ResManager,
 ) {
 

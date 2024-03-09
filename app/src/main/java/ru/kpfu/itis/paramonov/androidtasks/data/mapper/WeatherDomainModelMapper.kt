@@ -5,8 +5,9 @@ import ru.kpfu.itis.paramonov.androidtasks.domain.model.WeatherDataDomainModel
 import ru.kpfu.itis.paramonov.androidtasks.domain.model.WeatherDomainModel
 import ru.kpfu.itis.paramonov.androidtasks.domain.model.WeatherMainDomainModel
 import ru.kpfu.itis.paramonov.androidtasks.utils.Constants
+import javax.inject.Inject
 
-class WeatherDomainModelMapper {
+class WeatherDomainModelMapper @Inject constructor() {
     fun mapResponseToDomainModel(input: WeatherResponse?): WeatherDomainModel? {
         return input?.let {
             WeatherDomainModel(

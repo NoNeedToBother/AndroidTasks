@@ -5,8 +5,9 @@ import kotlinx.coroutines.withContext
 import ru.kpfu.itis.paramonov.androidtasks.domain.mapper.WeatherUiModelMapper
 import ru.kpfu.itis.paramonov.androidtasks.domain.repository.WeatherRepository
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.WeatherUiModel
+import javax.inject.Inject
 
-class GetWeatherDataUseCase(
+class GetWeatherDataUseCase @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val repository: WeatherRepository,
     private val mapper: WeatherUiModelMapper,

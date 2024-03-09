@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
@@ -17,6 +18,7 @@ import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentWeatherBinding
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
 
+@AndroidEntryPoint
 class WeatherFragment : Fragment(R.layout.fragment_weather) {
     private val binding: FragmentWeatherBinding by viewBinding(FragmentWeatherBinding::bind)
 

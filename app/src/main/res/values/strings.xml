@@ -13,6 +13,7 @@
     <string name="debug_base_url">base_url: %s</string>
     <string name="debug_version_code_name">version_name = %s, version_code = %d</string>
     <string name="debug_manufacturer_model">manufacturer = %s, model = %s</string>
-    <string name="debug_version_api">android_version = %s, api_version = %s</string>
+    <string name="debug_version_api">android_version = Android%s, api_version = %d</string>
     <string name="empty_weather_response">No weather data for this city</string>
+    <string name="temperature">%.2f \u2103</string>
 </resources>

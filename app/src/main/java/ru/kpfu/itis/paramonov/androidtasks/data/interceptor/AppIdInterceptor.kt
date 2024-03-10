@@ -8,7 +8,7 @@ import ru.kpfu.itis.paramonov.androidtasks.utils.Params
 class AppIdInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val newUrl = chain.request().url.newBuilder()
-            .addQueryParameter(Params.APP_ID_KEY, BuildConfig.OPEN_WEATHER_BASE_URL)
+            .addQueryParameter(Params.APP_ID_KEY, BuildConfig.OPEN_WEATHER_API_KEY)
             .build()
 
         val requestBuilder = chain.request().newBuilder().url(newUrl)

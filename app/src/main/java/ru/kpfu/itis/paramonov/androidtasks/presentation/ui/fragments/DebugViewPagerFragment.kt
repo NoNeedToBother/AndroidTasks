@@ -10,9 +10,7 @@ import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentDebugBinding
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.ViewPagerAdapter
 import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
 
-class DebugViewPagerFragment(
-    private val resManager: ResManager
-): Fragment(R.layout.fragment_debug) {
+class DebugViewPagerFragment: Fragment(R.layout.fragment_debug) {
     private val binding: FragmentDebugBinding by viewBinding(FragmentDebugBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -22,7 +20,7 @@ class DebugViewPagerFragment(
 
     private fun initViewPager() {
         with(binding) {
-            val adapter = ViewPagerAdapter(parentFragmentManager, lifecycle, resManager)
+            val adapter = ViewPagerAdapter(parentFragmentManager, lifecycle)
             val fragmentIdList = listOf(
                 R.layout.fragment_debug_info
             )

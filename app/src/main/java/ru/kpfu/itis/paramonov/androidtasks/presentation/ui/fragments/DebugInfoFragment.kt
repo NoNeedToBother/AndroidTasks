@@ -8,9 +8,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentDebugInfoBinding
-import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
 
-class DebugInfoFragment(private val resManager: ResManager): Fragment(R.layout.fragment_debug_info) {
+class DebugInfoFragment(): Fragment(R.layout.fragment_debug_info) {
 
     private val binding: FragmentDebugInfoBinding by viewBinding(FragmentDebugInfoBinding::bind)
 
@@ -22,26 +21,26 @@ class DebugInfoFragment(private val resManager: ResManager): Fragment(R.layout.f
 
     private fun showDebugInfo() {
         with (binding) {
-            tvAppName.text = String.format(
-                resManager.getString(R.string.debug_app_name),
-                resManager.getString(R.string.app_name)
+            tvAppName.text = getString(
+                R.string.debug_app_name,
+                getString(R.string.app_name)
             )
-            tvBaseUrl.text = String.format(
-                resManager.getString(R.string.debug_base_url),
+            tvBaseUrl.text = getString(
+                R.string.debug_base_url,
                 String.format(BuildConfig.OPEN_WEATHER_BASE_URL, "")
             )
-            tvVersionCodeName.text = String.format(
-                resManager.getString(R.string.debug_version_code_name),
+            tvVersionCodeName.text = getString(
+                R.string.debug_version_code_name,
                 BuildConfig.VERSION_NAME,
                 BuildConfig.VERSION_CODE
             )
-            tvManufacturerModel.text = String.format(
-                resManager.getString(R.string.debug_manufacturer_model),
+            tvManufacturerModel.text = getString(
+                R.string.debug_manufacturer_model,
                 Build.MANUFACTURER,
                 Build.MODEL
             )
-            tvVersionApi.text = String.format(
-                resManager.getString(R.string.debug_version_api),
+            tvVersionApi.text = getString(
+                R.string.debug_version_api,
                 Build.VERSION.RELEASE,
                 Build.VERSION.SDK_INT
             )

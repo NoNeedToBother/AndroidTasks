@@ -6,13 +6,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugInfoFragment
-import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
 import java.lang.RuntimeException
 
 class ViewPagerAdapter(
     fragmentManager: FragmentManager,
-    lifecycle: Lifecycle,
-    private val resManager: ResManager):
+    lifecycle: Lifecycle):
     FragmentStateAdapter(fragmentManager, lifecycle){
 
     private val fragmentIdList = mutableListOf<Int>()
@@ -23,7 +21,7 @@ class ViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when(fragmentIdList[position]) {
-            R.layout.fragment_debug_info -> DebugInfoFragment(resManager)
+            R.layout.fragment_debug_info -> DebugInfoFragment()
             else -> throw RuntimeException()
         }
     }

@@ -10,7 +10,6 @@ import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugViewPagerFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.WeatherFragment
-import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
 import ru.kpfu.itis.paramonov.androidtasks.utils.ShakeDetector
 import javax.inject.Inject
 
@@ -19,9 +18,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     @Inject
     lateinit var shakeDetector: ShakeDetector
-
-    @Inject
-    lateinit var resManager: ResManager
 
     private var sensorManager: SensorManager? = null
 
@@ -44,7 +40,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     supportFragmentManager.beginTransaction()
                         .replace(
                             R.id.main_activity_container,
-                            DebugViewPagerFragment(resManager),
+                            DebugViewPagerFragment(),
                             DebugViewPagerFragment.DEBUG_VIEW_PAGER_FRAGMENT_TAG
                         )
                         .addToBackStack(null)

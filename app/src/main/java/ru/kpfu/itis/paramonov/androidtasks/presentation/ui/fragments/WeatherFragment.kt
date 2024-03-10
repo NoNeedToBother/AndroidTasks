@@ -65,7 +65,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
                         llWeatherInfo.visibility = View.VISIBLE
                         tvMain.text = weatherData.main
                         tvDesc.text = weatherData.description
-                        tvTemperature.text = temperatureData.temp.toString()
+                        tvTemperature.text = getString(R.string.temperature, temperatureData.temp)
                         loadImage(weatherData.icon)
                     }
                 }
@@ -91,7 +91,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
     }
 
     private suspend fun checkErrors() {
-        viewModel.errorsChannel.consumeEach {error ->
+        for (error in viewModel.errorsChannel) {
             val errorMessage = error.message ?: getString(R.string.default_exception)
             Toast.makeText(
                 requireContext(),

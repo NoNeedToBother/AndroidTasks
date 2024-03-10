@@ -1,17 +1,15 @@
 package ru.kpfu.itis.paramonov.androidtasks.domain.model
 
-import ru.kpfu.itis.paramonov.androidtasks.utils.Constants
+import ru.kpfu.itis.paramonov.androidtasks.utils.Params
 
 data class WeatherDomainModel(
     val weatherData: WeatherDataDomainModel,
     val temperatureData: WeatherMainDomainModel
 ) {
     fun isEmptyResponse(): Boolean {
-        val isMainDataEmpty = with(this.temperatureData) {
-            temp == 0.0 && feelsLike == 0.0
-        }
+        val isMainDataEmpty = temperatureData.temp == 0.0
         val isWeatherDataEmpty = with(this.weatherData) {
-            val weatherEmptyData = Constants.WEATHER_EMPTY_DATA
+            val weatherEmptyData = Params.WEATHER_EMPTY_DATA
             icon == weatherEmptyData && description == weatherEmptyData && main == weatherEmptyData
         }
         return isMainDataEmpty && isWeatherDataEmpty

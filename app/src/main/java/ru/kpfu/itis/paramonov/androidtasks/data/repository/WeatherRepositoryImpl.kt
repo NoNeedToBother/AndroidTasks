@@ -1,6 +1,7 @@
 package ru.kpfu.itis.paramonov.androidtasks.data.repository
 
 import ru.kpfu.itis.paramonov.androidtasks.R
+import ru.kpfu.itis.paramonov.androidtasks.data.exceptions.EmptyWeatherResponseException
 import ru.kpfu.itis.paramonov.androidtasks.data.mapper.WeatherDomainModelMapper
 import ru.kpfu.itis.paramonov.androidtasks.data.remote.OpenWeatherApi
 import ru.kpfu.itis.paramonov.androidtasks.domain.model.WeatherDomainModel
@@ -21,8 +22,7 @@ class WeatherRepositoryImpl @Inject constructor(
         return if (domainModel != null && domainModel.isEmptyResponse().not()) {
             domainModel
         } else {
-            throw RuntimeException()
-            //throw EmptyWeatherResponseException(message = resManager.getString(R.string.empty_weather_response))
+            throw EmptyWeatherResponseException(message = resManager.getString(R.string.empty_weather_response))
         }
     }
 

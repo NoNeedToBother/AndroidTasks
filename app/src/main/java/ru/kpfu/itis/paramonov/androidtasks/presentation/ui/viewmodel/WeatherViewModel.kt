@@ -29,6 +29,7 @@ class WeatherViewModel @Inject constructor(
     val errorsChannel = Channel<Throwable>()
 
     fun getWeatherInfo(city: String) {
+        _currentWeatherFlow.value = null
         _loadingFlow.value = true
         viewModelScope.launch {
             try {

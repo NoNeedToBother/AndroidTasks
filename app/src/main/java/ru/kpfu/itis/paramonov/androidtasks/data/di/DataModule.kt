@@ -46,9 +46,4 @@ class DataModule {
 
         return builder.create(OpenWeatherApi::class.java)
     }
-
-    @Provides
-    fun provideDispatcher(): CoroutineDispatcher {
-        return Dispatchers.IO
-    }
 }

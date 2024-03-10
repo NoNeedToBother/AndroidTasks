@@ -16,8 +16,7 @@ class WeatherUiModelMapper @Inject constructor() {
                     icon = weatherData.icon
                 ),
                 temperatureData = WeatherMainUiModel(
-                    temp = temperatureData.temp,
-                    feelsLike = temperatureData.feelsLike
+                    temp = temperatureData.temp
                 )
             )
         }

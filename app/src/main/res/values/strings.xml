@@ -8,5 +8,11 @@
     <string name="bad_request">Bad request</string>
     <string name="too_many_requests">Too many requests, try again later</string>
     <string name="server_error">Something is wrong with server, try again later</string>
-    <string name="default_exception">Something went wrong...</string>
+    <string name="default_exception">Something went wrong…</string>
+    <string name="debug_app_name">app_name: %s</string>
+    <string name="debug_base_url">base_url: %s</string>
+    <string name="debug_version_code_name">version_name = %s, version_code = %d</string>
+    <string name="debug_manufacturer_model">manufacturer = %s, model = %s</string>
+    <string name="debug_version_api">android_version = %s, api_version = %s</string>
+    <string name="empty_weather_response">No weather data for this city</string>
 </resources>

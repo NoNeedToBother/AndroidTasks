@@ -2,31 +2,36 @@ package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
-import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentWeatherBinding
+import ru.kpfu.itis.paramonov.androidtasks.presentation.model.WeatherUiModel
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.CityWeatherAdapter
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
+import ru.kpfu.itis.paramonov.androidtasks.utils.lazyViewModel
 import javax.inject.Inject
 
 class WeatherFragment : Fragment(R.layout.fragment_weather) {
-    @Inject
-    lateinit var factory: ViewModelProvider.Factory
 
-    private val viewModel: WeatherViewModel by viewModels { factory }
+    private val viewModel: WeatherViewModel by lazyViewModel {
+        val cities = resources.getStringArray(R.array.cities).asList()
+        requireContext().appComponent.weatherViewModelFactory().create(cities)
+    }
 
     private val binding: FragmentWeatherBinding by viewBinding(FragmentWeatherBinding::bind)
+
+    private var adapter: CityWeatherAdapter? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,19 +40,29 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        observeData()
-        setOnClickListeners()
+        init()
     }
 
-    private fun setOnClickListeners() {
-        with(binding) {
-            btnGetWeather.setOnClickListener {
-                llWeatherInfo.visibility = View.GONE
-                val city = etCity.text.toString()
-                viewModel.getWeatherInfo(city)
-            }
-        }
+    private fun init() {
+        initRecyclerView()
+        viewModel.startCollectingWeatherInfo()
+        observeData()
+    }
+
+    private fun initRecyclerView() {
+        val adapter = CityWeatherAdapter(
+            context = requireContext(),
+            onCityClicked = ::onCityClicked
+        )
+        this.adapter = adapter
+        val layoutManager = LinearLayoutManager(requireContext())
+
+        binding.rvCities.adapter = adapter
+        binding.rvCities.layoutManager = layoutManager
+    }
+
+    private fun onCityClicked(weatherUiModel: WeatherUiModel) {
+
     }
 
     private fun observeData() {
@@ -65,38 +80,25 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
 
     private suspend fun collectWeatherData() {
         viewModel.currentWeatherFlow.collect { weatherDataResult ->
-            with(binding) {
-                weatherDataResult?.let {
-                    when (it) {
-                        is WeatherViewModel.WeatherDataResult.Success -> {
-                            val result = it.getValue()[0]
-                            llWeatherInfo.visibility = View.VISIBLE
-                            tvMain.text = result.weatherData.main
-                            tvDesc.text = result.weatherData.description
-                            tvTemperature.text = getString(R.string.temperature, result.temperatureData.temp)
-                            loadImage(result.weatherData.icon)
-                        }
-                        is WeatherViewModel.WeatherDataResult.Failure ->
-                            showError(it.getException())
+            weatherDataResult?.let {
+                when (it) {
+                    is WeatherViewModel.WeatherDataResult.Success -> {
+                        val result = it.getValue()
+                        adapter?.submitList(result)
                     }
+                    is WeatherViewModel.WeatherDataResult.Failure ->
+                        showError(it.getException())
                 }
             }
         }
     }
 
-    private fun loadImage(icon: String) {
-        val url = String.format(BuildConfig.OPEN_WEATHER_ICON_URL, icon)
-        Glide.with(requireContext())
-            .load(url)
-            .error(R.drawable.placeholder_img)
-            .into(binding.ivIcon)
-    }
-
     private suspend fun collectLoadingData() {
         viewModel.loadingFlow.collect {loading ->
             with(binding) {
+                /*
                 if (loading) pbLoading.visibility = View.VISIBLE
-                else pbLoading.visibility = View.GONE
+                else pbLoading.visibility = View.GONE*/
             }
         }
     }
@@ -108,5 +110,15 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
             errorMessage,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.stopCollectingWeatherInfo()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopCollectingWeatherInfo()
     }
 }

@@ -4,7 +4,8 @@ import ru.kpfu.itis.paramonov.androidtasks.utils.Params
 
 data class WeatherDomainModel(
     val weatherData: WeatherDataDomainModel,
-    val temperatureData: WeatherMainDomainModel
+    val temperatureData: WeatherMainDomainModel,
+    val city: String
 ) {
     fun isEmptyResponse(): Boolean {
         val isMainDataEmpty = temperatureData.temp == 0.0

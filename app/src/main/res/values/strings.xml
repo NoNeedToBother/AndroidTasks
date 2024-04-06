@@ -16,4 +16,17 @@
     <string name="debug_version_api">android_version = Android%s, api_version = %d</string>
     <string name="empty_weather_response">No weather data for this city</string>
     <string name="temperature">%.2f \u2103</string>
+
+    <string-array name="cities">
+        <item>Kazan</item>
+        <item>Moscow</item>
+        <item>London</item>
+        <item>Paris</item>
+        <item>Sydney</item>
+        <item>Beijing</item>
+        <item>Washington</item>
+        <item>Cairo</item>
+        <item>Helsinki</item>
+        <item>Mexico</item>
+    </string-array>
 </resources>

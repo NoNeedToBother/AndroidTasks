@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.di
+package ru.kpfu.itis.paramonov.androidtasks.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

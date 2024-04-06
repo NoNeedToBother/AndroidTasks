@@ -17,7 +17,8 @@ class WeatherUiModelMapper @Inject constructor() {
                 ),
                 temperatureData = WeatherMainUiModel(
                     temp = temperatureData.temp
-                )
+                ),
+                city = input.city
             )
         }
     }

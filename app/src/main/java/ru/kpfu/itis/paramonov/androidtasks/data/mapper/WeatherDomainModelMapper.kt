@@ -18,7 +18,8 @@ class WeatherDomainModelMapper @Inject constructor() {
                 ),
                 temperatureData = WeatherMainDomainModel(
                     temp = (it.temperatureData.temp ?: 0) as Double
-                )
+                ),
+                city = input.city
             )
         }
     }

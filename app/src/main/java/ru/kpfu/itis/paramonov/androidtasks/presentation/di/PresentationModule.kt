@@ -8,8 +8,4 @@ import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherView
 
 @Module
 abstract class PresentationModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(WeatherViewModel::class)
-    abstract fun bindWeatherViewModel(viewModel: WeatherViewModel): ViewModel
 }

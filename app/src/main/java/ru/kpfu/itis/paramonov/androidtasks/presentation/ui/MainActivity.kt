@@ -5,15 +5,14 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import dagger.hilt.android.AndroidEntryPoint
 import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugViewPagerFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.WeatherFragment
 import ru.kpfu.itis.paramonov.androidtasks.utils.ShakeDetector
+import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     @Inject
@@ -23,6 +22,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        appComponent.inject(this)
 
         initShakeDetector()
 

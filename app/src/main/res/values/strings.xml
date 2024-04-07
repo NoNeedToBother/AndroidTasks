@@ -17,6 +17,8 @@
     <string name="empty_weather_response">No weather data for this city</string>
     <string name="temperature">%.2f \u2103</string>
     <string name="empty_forecast_response">No broadcast data for this city</string>
+    <string name="date">%02d.%02d</string>
+    <string name="time">%02d:%02d</string>
 
     <string-array name="cities">
         <item>Kazan</item>

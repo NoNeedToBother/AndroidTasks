@@ -1,9 +1,11 @@
 package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
 
+import android.content.Context
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -11,17 +13,25 @@ import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentWeatherCityBinding
 import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.model.forecast.ForecastListWeatherUiModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather.WeatherUiModel
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.ForecastAdapter
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.CityWeatherViewModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.SpacingItemDecorator
 import ru.kpfu.itis.paramonov.androidtasks.utils.Params
+import ru.kpfu.itis.paramonov.androidtasks.utils.ResourceManager
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import ru.kpfu.itis.paramonov.androidtasks.utils.gone
 import ru.kpfu.itis.paramonov.androidtasks.utils.lazyViewModel
 import ru.kpfu.itis.paramonov.androidtasks.utils.show
+import javax.inject.Inject
 
 class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
 
     private val binding: FragmentWeatherCityBinding by viewBinding(FragmentWeatherCityBinding::bind)
+
+    @Inject
+    lateinit var resourceManager: ResourceManager
 
     private val viewModel: CityWeatherViewModel by lazyViewModel {
         val city = requireArguments().getString(CITY_KEY, Params.CITY_EMPTY_DATA)
@@ -32,10 +42,29 @@ class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
         )
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireContext().appComponent.inject(this)
+    }
+
     override fun initView() {}
+
+    private fun initRecyclerView(forecasts: List<ForecastListWeatherUiModel>) {
+        with(binding.rvForecast) {
+            val adapter = ForecastAdapter(
+                requireContext(), resourceManager
+            )
+            adapter.setItems(forecasts)
+            this.adapter = adapter
+            val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            this.layoutManager = layoutManager
+            addItemDecoration(SpacingItemDecorator(20, SpacingItemDecorator.Side.RIGHT))
+        }
+    }
 
     override fun observeData() {
         viewModel.getWeatherInfo()
+        viewModel.getForecastInfo()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.CREATED) {
                 launch {
@@ -43,6 +72,22 @@ class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
                 }
                 launch {
                     collectWeatherLoadingData()
+                }
+                launch {
+                    collectForecastData()
+                }
+            }
+        }
+    }
+
+    private suspend fun collectForecastData() {
+        viewModel.forecastFlow.collect { result ->
+            result?.let {
+                when (it) {
+                    is CityWeatherViewModel.ForecastDataResult.Success ->
+                        initRecyclerView(it.getValue().forecasts)
+                    is CityWeatherViewModel.ForecastDataResult.Failure ->
+                        showError(it.getException())
                 }
             }
         }

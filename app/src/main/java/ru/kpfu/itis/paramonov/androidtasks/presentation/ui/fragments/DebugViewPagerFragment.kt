@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentDebugBinding
-import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.ViewPagerAdapter
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.DebugViewPagerAdapter
 
 class DebugViewPagerFragment: Fragment(R.layout.fragment_debug) {
     private val binding: FragmentDebugBinding by viewBinding(FragmentDebugBinding::bind)
@@ -18,7 +18,7 @@ class DebugViewPagerFragment: Fragment(R.layout.fragment_debug) {
 
     private fun initViewPager() {
         with(binding) {
-            val adapter = ViewPagerAdapter(parentFragmentManager, lifecycle)
+            val adapter = DebugViewPagerAdapter(parentFragmentManager, lifecycle)
             val fragmentIdList = listOf(
                 R.layout.fragment_debug_info
             )

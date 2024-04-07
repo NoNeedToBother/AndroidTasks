@@ -36,14 +36,16 @@ class WeatherViewModel @AssistedInject constructor(
     private var timer: Timer? = null
 
     fun startCollectingWeatherInfo() {
-        timer = Timer()
-        timer?.schedule(object : TimerTask() {
-            override fun run() {
-                _currentWeatherFlow.value = null
-                _loadingFlow.value = true
-                getWeatherInfo()
-            }
-        }, 100, DELAY)
+        if (timer == null) {
+            timer = Timer()
+            timer?.schedule(object : TimerTask() {
+                override fun run() {
+                    _currentWeatherFlow.value = null
+                    _loadingFlow.value = true
+                    getWeatherInfo()
+                }
+            }, 100, DELAY)
+        }
     }
 
     fun stopCollectingWeatherInfo() {

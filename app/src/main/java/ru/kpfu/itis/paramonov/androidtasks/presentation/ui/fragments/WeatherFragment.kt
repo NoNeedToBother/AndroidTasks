@@ -1,10 +1,6 @@
 package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
 
 import android.content.Context
-import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +14,7 @@ import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather.WeatherUiModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.CityWeatherAdapter
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.SpacingItemDecorator
 import ru.kpfu.itis.paramonov.androidtasks.utils.ResourceManager
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import ru.kpfu.itis.paramonov.androidtasks.utils.gone
@@ -57,8 +54,11 @@ class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
         this.adapter = adapter
         val layoutManager = LinearLayoutManager(requireContext())
 
-        binding.rvCities.adapter = adapter
-        binding.rvCities.layoutManager = layoutManager
+        with(binding.rvCities) {
+            this.adapter = adapter
+            this.layoutManager = layoutManager
+            addItemDecoration(SpacingItemDecorator(24, SpacingItemDecorator.Side.BOTTOM))
+        }
     }
 
     private fun onCityClicked(weatherUiModel: WeatherUiModel) {

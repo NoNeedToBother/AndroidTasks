@@ -7,10 +7,10 @@ import ru.kpfu.itis.paramonov.androidtasks.data.di.NetworkModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.di.PresentationModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.di.ViewModelModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.MainActivity
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.CityWeatherFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.WeatherFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.CityWeatherViewModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
-import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel_Factory
 import javax.inject.Singleton
 
 @Component(
@@ -36,6 +36,8 @@ interface AppComponent {
     fun inject(activity: MainActivity)
 
     fun inject(weatherFragment: WeatherFragment)
+
+    fun inject(cityWeatherFragment: CityWeatherFragment)
 
     fun weatherViewModelFactory(): WeatherViewModel.Factory
 

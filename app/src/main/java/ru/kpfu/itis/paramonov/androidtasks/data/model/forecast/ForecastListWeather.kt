@@ -6,6 +6,6 @@ import ru.kpfu.itis.paramonov.androidtasks.data.model.weather.ResponseWeatherDat
 
 class ForecastListWeather(
     @SerializedName("dt_txt") val time: String?,
-    @SerializedName("weather") val weatherData: ResponseWeatherData?,
+    @SerializedName("weather") val weatherData: List<ResponseWeatherData>?,
     @SerializedName("main") val temperatureData: ResponseTemperatureData?
 )

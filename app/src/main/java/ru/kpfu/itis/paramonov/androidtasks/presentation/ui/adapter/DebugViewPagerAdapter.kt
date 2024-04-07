@@ -8,7 +8,7 @@ import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugInfoFragment
 import java.lang.RuntimeException
 
-class ViewPagerAdapter(
+class DebugViewPagerAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle):
     FragmentStateAdapter(fragmentManager, lifecycle){

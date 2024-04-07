@@ -7,10 +7,13 @@ import ru.kpfu.itis.paramonov.androidtasks.data.model.weather.ResponseWeatherDat
 import ru.kpfu.itis.paramonov.androidtasks.domain.model.forecast.ForecastListWeatherDomainModel
 import ru.kpfu.itis.paramonov.androidtasks.domain.model.forecast.ForecastDomainModel
 import ru.kpfu.itis.paramonov.androidtasks.domain.model.weather.WeatherDataDomainModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.DateTimeParser
 import ru.kpfu.itis.paramonov.androidtasks.utils.Params
 import javax.inject.Inject
 
-class ForecastDomainModelMapper @Inject constructor() {
+class ForecastDomainModelMapper @Inject constructor(
+    private val dateTimeParser: DateTimeParser
+) {
 
     fun mapResponseToDomainModel(input: ForecastResponse?): ForecastDomainModel? {
         return input?.let {response ->
@@ -33,9 +36,9 @@ class ForecastDomainModelMapper @Inject constructor() {
         return data?.let {
             if (checkForecastListWeather(it)) {
                 val temperatureData = it.temperatureData as ResponseTemperatureData
-                val weatherData = it.weatherData as ResponseWeatherData
+                val weatherData = (it.weatherData as List<ResponseWeatherData>)[0]
                 ForecastListWeatherDomainModel(
-                    time = it.time as String,
+                    time = dateTimeParser.parseTime(it.time as String),
                     temperature = temperatureData.temp as Double,
                     weatherData = WeatherDataDomainModel(
                         main = weatherData.main as String,
@@ -52,11 +55,11 @@ class ForecastDomainModelMapper @Inject constructor() {
         return with(data) {
             var correct = true
             if (time == null) correct = false
-            weatherData?.run {
-                if (main == null || description == null || icon == null) correct = false
-            } ?: {
-                correct = false
-            }
+            if (!weatherData.isNullOrEmpty()) {
+                with(weatherData[0]) {
+                    if (main == null || description == null || icon == null) correct = false
+                }
+            } else correct = false
             temperatureData?.run {
                 if (temp == null) correct = false
             } ?: {

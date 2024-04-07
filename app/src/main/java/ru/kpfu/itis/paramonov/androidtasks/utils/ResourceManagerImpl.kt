@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.annotation.StringRes
 import javax.inject.Inject
 
-class ResManagerImpl @Inject constructor(
+class ResourceManagerImpl @Inject constructor(
     private val ctx: Context,
-) : ResManager {
+) : ResourceManager {
 
     override fun getString(@StringRes res: Int): String = ctx.resources.getString(res)
 

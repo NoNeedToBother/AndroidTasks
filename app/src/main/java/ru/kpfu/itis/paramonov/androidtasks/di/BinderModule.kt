@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import ru.kpfu.itis.paramonov.androidtasks.data.repository.WeatherRepositoryImpl
 import ru.kpfu.itis.paramonov.androidtasks.domain.repository.WeatherRepository
-import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
-import ru.kpfu.itis.paramonov.androidtasks.utils.ResManagerImpl
+import ru.kpfu.itis.paramonov.androidtasks.utils.ResourceManager
+import ru.kpfu.itis.paramonov.androidtasks.utils.ResourceManagerImpl
 
 @Module
 interface BinderModule {
@@ -17,6 +17,6 @@ interface BinderModule {
 
     @Binds
     fun bindResManagerToImpl(
-        impl: ResManagerImpl
-    ): ResManager
+        impl: ResourceManagerImpl
+    ): ResourceManager
 }

@@ -3,12 +3,10 @@ package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentDebugBinding
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.ViewPagerAdapter
-import ru.kpfu.itis.paramonov.androidtasks.utils.ResManager
 
 class DebugViewPagerFragment: Fragment(R.layout.fragment_debug) {
     private val binding: FragmentDebugBinding by viewBinding(FragmentDebugBinding::bind)

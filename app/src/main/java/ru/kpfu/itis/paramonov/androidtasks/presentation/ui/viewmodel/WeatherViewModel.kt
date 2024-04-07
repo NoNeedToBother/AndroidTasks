@@ -10,20 +10,20 @@ import kotlinx.coroutines.launch
 import ru.kpfu.itis.paramonov.androidtasks.data.handler.ExceptionHandlerDelegate
 import ru.kpfu.itis.paramonov.androidtasks.domain.usecase.GetWeatherDataUseCase
 import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseViewModel
-import ru.kpfu.itis.paramonov.androidtasks.presentation.model.WeatherUiModel
-import ru.kpfu.itis.paramonov.androidtasks.utils.Params
+import ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather.WeatherUiModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.Keys
 import java.util.Timer
 import java.util.TimerTask
 
 class WeatherViewModel @AssistedInject constructor(
     private val getWeatherDataUseCase: GetWeatherDataUseCase,
     private val exceptionHandlerDelegate: ExceptionHandlerDelegate,
-    @Assisted(Params.CITIES_LIST_KEY) private val cities: List<String>
+    @Assisted(Keys.CITIES_LIST_KEY) private val cities: List<String>
 ) : BaseViewModel() {
 
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted(Params.CITIES_LIST_KEY) cities: List<String>): WeatherViewModel
+        fun create(@Assisted(Keys.CITIES_LIST_KEY) cities: List<String>): WeatherViewModel
     }
 
     private val _currentWeatherFlow = MutableStateFlow<WeatherDataResult?>(null)
@@ -31,8 +31,7 @@ class WeatherViewModel @AssistedInject constructor(
         get() = _currentWeatherFlow
 
     private val _loadingFlow = MutableStateFlow(false)
-    val loadingFlow: StateFlow<Boolean>
-        get() = _loadingFlow
+    val loadingFlow: StateFlow<Boolean> get() = _loadingFlow
 
     private var timer: Timer? = null
 
@@ -73,8 +72,9 @@ class WeatherViewModel @AssistedInject constructor(
     }
 
     sealed class WeatherDataResult {
-        class Success(private val result: MutableList<WeatherUiModel>): WeatherDataResult(), Result.Success<MutableList<WeatherUiModel>> {
-            override fun getValue(): MutableList<WeatherUiModel> = result
+        class Success(private val result: List<WeatherUiModel>):
+            WeatherDataResult(), Result.Success<List<WeatherUiModel>> {
+            override fun getValue(): List<WeatherUiModel> = result
         }
         class Failure(private val ex: Throwable): WeatherDataResult(), Result.Failure {
             override fun getException(): Throwable = ex

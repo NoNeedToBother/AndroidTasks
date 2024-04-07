@@ -1,8 +1,8 @@
 package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.kpfu.itis.paramonov.androidtasks.presentation.model.WeatherUiModel
-import ru.kpfu.itis.paramonov.androidtasks.utils.Params
+import ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather.WeatherUiModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.Keys
 
 class CityWeatherDiffUtilCallback : DiffUtil.ItemCallback<WeatherUiModel>() {
 
@@ -16,8 +16,9 @@ class CityWeatherDiffUtilCallback : DiffUtil.ItemCallback<WeatherUiModel>() {
                 val icon = o.weatherData.icon == n.weatherData.icon
                 val main = o.weatherData.main == n.weatherData.main
                 val description = o.weatherData.description == n.weatherData.description
-                val temperature = o.temperatureData.temp == n.temperatureData.temp
-                icon && main && description && temperature
+                val temperature = o.temperature == n.temperature
+                val city = o.city == n.city
+                icon && main && description && temperature && city
             }
         }
     }
@@ -27,19 +28,19 @@ class CityWeatherDiffUtilCallback : DiffUtil.ItemCallback<WeatherUiModel>() {
             newItem.let { n ->
                 val changes: MutableMap<String, Any> = mutableMapOf()
                 addChangeIfNecessary(o.weatherData.icon, n.weatherData.icon,
-                    Params.PAYLOAD_ICON_KEY, changes)
+                    Keys.PAYLOAD_ICON_KEY, changes)
                 addChangeIfNecessary(o.weatherData.main, n.weatherData.main,
-                    Params.PAYLOAD_MAIN_KEY, changes)
+                    Keys.PAYLOAD_MAIN_KEY, changes)
                 addChangeIfNecessary(o.weatherData.description, n.weatherData.description,
-                    Params.PAYLOAD_DESC_KEY, changes)
-                addChangeIfNecessary(o.temperatureData.temp, n.temperatureData.temp,
-                    Params.PAYLOAD_TEMP_KEY, changes)
+                    Keys.PAYLOAD_DESC_KEY, changes)
+                addChangeIfNecessary(o.temperature, n.temperature, Keys.PAYLOAD_TEMP_KEY, changes)
+                addChangeIfNecessary(o.city, n.city, Keys.PAYLOAD_CITY_KEY, changes)
                 changes
             }
         }
     }
 
     private fun <T : Any> addChangeIfNecessary(valueOld: T, valueNew: T, key: String, map: MutableMap<String, Any>) {
-        if (!valueOld.equals(valueNew)) map[key] = valueNew
+        if (valueOld != valueNew) map[key] = valueNew
     }
 }

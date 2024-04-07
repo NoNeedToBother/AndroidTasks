@@ -2,7 +2,7 @@ package ru.kpfu.itis.paramonov.androidtasks.utils
 
 import androidx.annotation.StringRes
 
-interface ResManager {
+interface ResourceManager {
 
     fun getString(@StringRes res: Int): String
 

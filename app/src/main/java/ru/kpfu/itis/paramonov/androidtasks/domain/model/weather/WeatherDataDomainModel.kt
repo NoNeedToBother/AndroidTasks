@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.domain.model
+package ru.kpfu.itis.paramonov.androidtasks.domain.model.weather
 
 data class WeatherDataDomainModel(
     val main: String,

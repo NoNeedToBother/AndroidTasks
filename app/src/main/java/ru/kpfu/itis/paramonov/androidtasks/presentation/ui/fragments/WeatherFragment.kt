@@ -2,12 +2,11 @@ package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,14 +14,21 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentWeatherBinding
-import ru.kpfu.itis.paramonov.androidtasks.presentation.model.WeatherUiModel
+import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather.WeatherUiModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.CityWeatherAdapter
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.ResourceManager
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
+import ru.kpfu.itis.paramonov.androidtasks.utils.gone
 import ru.kpfu.itis.paramonov.androidtasks.utils.lazyViewModel
+import ru.kpfu.itis.paramonov.androidtasks.utils.show
 import javax.inject.Inject
 
-class WeatherFragment : Fragment(R.layout.fragment_weather) {
+class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
+
+    @Inject
+    lateinit var resourceManager: ResourceManager
 
     private val viewModel: WeatherViewModel by lazyViewModel {
         val cities = resources.getStringArray(R.array.cities).asList()
@@ -38,21 +44,15 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
         requireContext().appComponent.inject(this)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        init()
-    }
-
-    private fun init() {
+    override fun initView() {
         initRecyclerView()
-        viewModel.startCollectingWeatherInfo()
         observeData()
     }
 
     private fun initRecyclerView() {
         val adapter = CityWeatherAdapter(
-            context = requireContext(),
-            onCityClicked = ::onCityClicked
+            onCityClicked = ::onCityClicked,
+            resourceManager = resourceManager
         )
         this.adapter = adapter
         val layoutManager = LinearLayoutManager(requireContext())
@@ -62,10 +62,25 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
     }
 
     private fun onCityClicked(weatherUiModel: WeatherUiModel) {
-
+        weatherUiModel.let {model ->
+            parentFragmentManager.commit {
+                replace(
+                    R.id.main_activity_container,
+                    CityWeatherFragment.newInstance(
+                        icon = model.weatherData.icon,
+                        city = model.city,
+                        longitude = model.coordinates.longitude,
+                        latitude = model.coordinates.latitude
+                    ), CityWeatherFragment.CITY_WEATHER_FRAGMENT_TAG
+                )
+                addToBackStack(null)
+            }
+        }
     }
 
-    private fun observeData() {
+    override fun observeData() {
+        viewModel.startCollectingWeatherInfo()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.CREATED) {
                 launch {
@@ -96,20 +111,10 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
     private suspend fun collectLoadingData() {
         viewModel.loadingFlow.collect {loading ->
             with(binding) {
-                /*
-                if (loading) pbLoading.visibility = View.VISIBLE
-                else pbLoading.visibility = View.GONE*/
+                if (loading) pbLoading.show()
+                else pbLoading.gone()
             }
         }
-    }
-
-    private fun showError(error: Throwable) {
-        val errorMessage = error.message ?: getString(R.string.default_exception)
-        Toast.makeText(
-            requireContext(),
-            errorMessage,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     override fun onStop() {

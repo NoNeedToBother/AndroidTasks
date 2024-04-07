@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.model
+package ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather
 
 class WeatherDataUiModel(
     val main: String,

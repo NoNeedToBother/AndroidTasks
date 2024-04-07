@@ -28,22 +28,18 @@ class CityWeatherAdapter(
         holder.onBind(getItem(position))
     }
 
-    /*
     override fun onBindViewHolder(
         holder: CityWeatherViewHolder,
         position: Int,
         payloads: MutableList<Any>
     ) {
         if (payloads.isNotEmpty()) {
-            val changes = payloads.first() as Map<String, Any>
-            for (changeKey in changes.keys) {
-                when (changeKey) {
-                    Key.PAYLOAD_TEMP_KEY -> holder.updateTemperature(changes[changeKey] as Double)
-                    Key.PAYLOAD_DESC_KEY -> holder.updateDescription(changes[changeKey] as String)
-                    Key.PAYLOAD_MAIN_KEY -> holder.updateMain(changes[changeKey] as String)
-                    Key.PAYLOAD_ICON_KEY -> holder.updateIcon(changes[changeKey] as String)
-                }
-            }
+            val changes = payloads.first() as CityWeatherDiffUtilCallback.WeatherModelPayload
+            changes.description?.let { holder.updateDescription(it) }
+            changes.city?.let { holder.updateCity(it) }
+            changes.temperature?.let { holder.updateTemperature(it) }
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
         }
-    }*/
+    }
 }

@@ -2,7 +2,6 @@ package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.weather.WeatherUiModel
-import ru.kpfu.itis.paramonov.androidtasks.utils.Keys
 
 class CityWeatherDiffUtilCallback : DiffUtil.ItemCallback<WeatherUiModel>() {
 
@@ -26,21 +25,19 @@ class CityWeatherDiffUtilCallback : DiffUtil.ItemCallback<WeatherUiModel>() {
     override fun getChangePayload(oldItem: WeatherUiModel, newItem: WeatherUiModel): Any {
         return oldItem.let {o ->
             newItem.let { n ->
-                val changes: MutableMap<String, Any> = mutableMapOf()
-                addChangeIfNecessary(o.weatherData.icon, n.weatherData.icon,
-                    Keys.PAYLOAD_ICON_KEY, changes)
-                addChangeIfNecessary(o.weatherData.main, n.weatherData.main,
-                    Keys.PAYLOAD_MAIN_KEY, changes)
-                addChangeIfNecessary(o.weatherData.description, n.weatherData.description,
-                    Keys.PAYLOAD_DESC_KEY, changes)
-                addChangeIfNecessary(o.temperature, n.temperature, Keys.PAYLOAD_TEMP_KEY, changes)
-                addChangeIfNecessary(o.city, n.city, Keys.PAYLOAD_CITY_KEY, changes)
-                changes
+                val payload = WeatherModelPayload()
+                if (o.city != n.city) payload.city = n.city
+                if (o.weatherData.description != n.weatherData.description)
+                    payload.description = n.weatherData.description
+                if (o.temperature != n.temperature) payload.temperature = n.temperature
+                payload
             }
         }
     }
 
-    private fun <T : Any> addChangeIfNecessary(valueOld: T, valueNew: T, key: String, map: MutableMap<String, Any>) {
-        if (valueOld != valueNew) map[key] = valueNew
+    class WeatherModelPayload {
+        var description: String? = null
+        var temperature: Double? = null
+        var city: String? = null
     }
 }

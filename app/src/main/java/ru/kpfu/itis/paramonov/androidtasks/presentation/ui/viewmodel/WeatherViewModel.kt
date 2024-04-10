@@ -63,6 +63,7 @@ class WeatherViewModel @AssistedInject constructor(
             } catch (ex: Exception) {
                 val resEx = exceptionHandlerDelegate.handleException(ex)
                 _currentWeatherFlow.value = WeatherDataResult.Failure(resEx)
+                throw ex
             } finally {
                 _loadingFlow.value = false
             }

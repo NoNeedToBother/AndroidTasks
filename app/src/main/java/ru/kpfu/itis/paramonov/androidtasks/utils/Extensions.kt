@@ -8,6 +8,11 @@ import androidx.lifecycle.ViewModel
 import ru.kpfu.itis.paramonov.androidtasks.App
 import ru.kpfu.itis.paramonov.androidtasks.di.AppComponent
 import androidx.fragment.app.viewModels
+import okhttp3.Response
+import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.asResponseBody
+import okio.Buffer
+import okio.BufferedSource
 
 val Context.appComponent: AppComponent
     get() = when (this) {
@@ -22,6 +27,13 @@ fun View.gone() {
 fun View.show() {
     visibility = View.VISIBLE
 }
+
+val Response.bodyCopy: ResponseBody?
+    get() = body?.let {body ->
+        val source: BufferedSource = body.source()
+        val bufferedCopy: Buffer = source.buffer.clone()
+        bufferedCopy.asResponseBody(body.contentType(), body.contentLength())
+    }
 
 inline fun <reified T : ViewModel> Fragment.lazyViewModel(
     noinline create: (stateHandle: SavedStateHandle) -> T

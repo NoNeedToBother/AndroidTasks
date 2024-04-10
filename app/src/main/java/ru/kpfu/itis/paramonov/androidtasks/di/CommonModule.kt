@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 class CommonModule {
 
     @Provides
-    fun provideDispatcher(): CoroutineDispatcher {
+    fun dispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugInfoFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugResponseLogFragment
 import java.lang.RuntimeException
 
 class DebugViewPagerAdapter(
@@ -22,6 +23,7 @@ class DebugViewPagerAdapter(
     override fun createFragment(position: Int): Fragment {
         return when(fragmentIdList[position]) {
             R.layout.fragment_debug_info -> DebugInfoFragment()
+            R.layout.fragment_debug_response_log -> DebugResponseLogFragment()
             else -> throw RuntimeException()
         }
     }

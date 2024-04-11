@@ -8,6 +8,7 @@ import ru.kpfu.itis.paramonov.androidtasks.presentation.di.PresentationModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.di.ViewModelModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.MainActivity
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.CityWeatherFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugResponseLogFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.WeatherFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.CityWeatherViewModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
@@ -38,6 +39,8 @@ interface AppComponent {
     fun inject(weatherFragment: WeatherFragment)
 
     fun inject(cityWeatherFragment: CityWeatherFragment)
+
+    fun inject(responseLogFragment: DebugResponseLogFragment)
 
     fun weatherViewModelFactory(): WeatherViewModel.Factory
 

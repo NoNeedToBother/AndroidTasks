@@ -69,7 +69,7 @@ class CityWeatherViewModel @AssistedInject constructor(
         }
     }
 
-    sealed class WeatherDataResult {
+    sealed class WeatherDataResult: Result {
         class Success(private val result: WeatherUiModel): WeatherDataResult(), Result.Success<WeatherUiModel> {
             override fun getValue(): WeatherUiModel = result
         }
@@ -78,11 +78,11 @@ class CityWeatherViewModel @AssistedInject constructor(
         }
     }
 
-    sealed class ForecastDataResult {
-        class Success(private val result: ForecastUiModel): ForecastDataResult(), Result.Success<ForecastUiModel> {
+    sealed interface ForecastDataResult: Result {
+        class Success(private val result: ForecastUiModel): ForecastDataResult, Result.Success<ForecastUiModel> {
             override fun getValue(): ForecastUiModel = result
         }
-        class Failure(private val ex: Throwable): ForecastDataResult(), Result.Failure {
+        class Failure(private val ex: Throwable): ForecastDataResult, Result.Failure {
             override fun getException(): Throwable = ex
         }
     }

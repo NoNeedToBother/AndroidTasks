@@ -63,7 +63,6 @@ class WeatherViewModel @AssistedInject constructor(
             } catch (ex: Exception) {
                 val resEx = exceptionHandlerDelegate.handleException(ex)
                 _currentWeatherFlow.value = WeatherDataResult.Failure(resEx)
-                throw ex
             } finally {
                 _loadingFlow.value = false
             }
@@ -74,12 +73,12 @@ class WeatherViewModel @AssistedInject constructor(
         return getWeatherDataUseCase.invoke(city)
     }
 
-    sealed class WeatherDataResult {
+    sealed interface WeatherDataResult: Result {
         class Success(private val result: List<WeatherUiModel>):
-            WeatherDataResult(), Result.Success<List<WeatherUiModel>> {
+            WeatherDataResult, Result.Success<List<WeatherUiModel>> {
             override fun getValue(): List<WeatherUiModel> = result
         }
-        class Failure(private val ex: Throwable): WeatherDataResult(), Result.Failure {
+        class Failure(private val ex: Throwable): WeatherDataResult, Result.Failure {
             override fun getException(): Throwable = ex
         }
     }

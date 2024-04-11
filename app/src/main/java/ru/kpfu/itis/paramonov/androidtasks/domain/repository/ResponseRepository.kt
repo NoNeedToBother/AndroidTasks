@@ -1,8 +1,8 @@
 package ru.kpfu.itis.paramonov.androidtasks.domain.repository
 
-import ru.kpfu.itis.paramonov.androidtasks.data.model.response.ResponseData
+import ru.kpfu.itis.paramonov.androidtasks.domain.model.response.ResponseDomainModel
 
 interface ResponseRepository {
 
-    fun getResponses(): List<ResponseData>
+    fun getResponses(): List<ResponseDomainModel>
 }

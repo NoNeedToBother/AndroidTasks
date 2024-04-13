@@ -8,8 +8,9 @@ import ru.kpfu.itis.paramonov.androidtasks.domain.usecase.GetResponsesLogUseCase
 import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseViewModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.response.ResponseUiModel
 import java.lang.Exception
+import javax.inject.Inject
 
-class DebugResponseLogViewModel(
+class DebugResponseLogViewModel @Inject constructor(
     private val getResponsesLogUseCase: GetResponsesLogUseCase
 ): BaseViewModel() {
 

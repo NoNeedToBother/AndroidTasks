@@ -5,4 +5,6 @@ import ru.kpfu.itis.paramonov.androidtasks.domain.model.response.ResponseDomainM
 interface ResponseRepository {
 
     fun getResponses(): List<ResponseDomainModel>
+
+    fun get(pos: Int): ResponseDomainModel
 }

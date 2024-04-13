@@ -11,6 +11,7 @@ class ResponseUiModelMapper @Inject constructor() {
     fun mapDomainToUiModel(input: ResponseDomainModel): ResponseUiModel {
         return ResponseUiModel(
             input.method,
+            input.code,
             getResponseStatus(input.status),
             input.url,
             input.headers,

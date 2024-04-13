@@ -13,6 +13,10 @@ class ResponseRepositoryImpl @Inject constructor(
     override fun getResponses(): List<ResponseDomainModel> {
         return log.responseDataList.map { data ->
             responseDomainModelMapper.mapResponseToDomainModel(data)
-        }
+        }.reversed()
+    }
+
+    override fun get(pos: Int): ResponseDomainModel {
+        return getResponses()[pos]
     }
 }

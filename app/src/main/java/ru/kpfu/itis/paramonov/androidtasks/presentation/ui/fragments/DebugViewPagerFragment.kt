@@ -18,7 +18,7 @@ class DebugViewPagerFragment: Fragment(R.layout.fragment_debug) {
 
     private fun initViewPager() {
         with(binding) {
-            val adapter = DebugViewPagerAdapter(parentFragmentManager, lifecycle)
+            val adapter = DebugViewPagerAdapter(childFragmentManager, lifecycle)
             val fragmentIdList = listOf(
                 R.layout.fragment_debug_info,
                 R.layout.fragment_debug_response_log

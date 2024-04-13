@@ -19,6 +19,11 @@
     <string name="empty_forecast_response">No broadcast data for this city</string>
     <string name="date">%02d.%02d</string>
     <string name="time">%02d:%02d</string>
+    <string name="req_method">Request method: %s</string>
+    <string name="req_url">Request url: %s</string>
+    <string name="req_headers">Request headers: %s<br/></string>
+    <string name="req_body">Request body: %s</string>
+    <string name="resp_body">Response body: %s</string>
 
     <string-array name="cities">
         <item>Kazan</item>

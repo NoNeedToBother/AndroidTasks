@@ -21,4 +21,8 @@ object Params {
 
     const val RESPONSE_SERVER_ERROR_CODE_LOWER_BOUND = 500
     const val RESPONSE_SERVER_ERROR_CODE_UPPER_BOUND = 599
+
+    const val REQUEST_EMPTY_BODY = "No request body data"
+    const val RESPONSE_EMPTY_BODY = "No response body data"
+    const val HEADERS_EMPTY = "No headers data"
 }

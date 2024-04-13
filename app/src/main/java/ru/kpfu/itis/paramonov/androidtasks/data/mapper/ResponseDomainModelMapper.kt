@@ -10,6 +10,7 @@ class ResponseDomainModelMapper @Inject constructor() {
     fun mapResponseToDomainModel(input: ResponseData): ResponseDomainModel {
         return ResponseDomainModel(
             input.method,
+            input.code,
             getResponseStatus(input.code),
             input.url,
             input.headers,

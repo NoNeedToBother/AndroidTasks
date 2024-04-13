@@ -47,7 +47,7 @@ class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
         requireContext().appComponent.inject(this)
     }
 
-    override fun initView() {}
+    override fun init() {}
 
     private fun initRecyclerView(forecasts: List<ForecastListWeatherUiModel>) {
         with(binding.rvForecast) {

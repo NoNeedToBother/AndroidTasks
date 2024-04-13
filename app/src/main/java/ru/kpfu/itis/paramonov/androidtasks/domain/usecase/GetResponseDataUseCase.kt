@@ -7,16 +7,15 @@ import ru.kpfu.itis.paramonov.androidtasks.domain.repository.ResponseRepository
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.response.ResponseUiModel
 import javax.inject.Inject
 
-class GetResponsesLogUseCase @Inject constructor(
+class GetResponseDataUseCase @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val repository: ResponseRepository,
     private val mapper: ResponseUiModelMapper
 ) {
-    suspend operator fun invoke(): List<ResponseUiModel> {
+
+    suspend operator fun invoke(pos: Int): ResponseUiModel {
         return withContext(dispatcher) {
-            repository.getResponses().map {
-                mapper.mapDomainToUiModel(it)
-            }
+            mapper.mapDomainToUiModel(repository.get(pos))
         }
     }
 }

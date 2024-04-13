@@ -7,4 +7,5 @@ object Keys {
     const val LONGITUDE_KEY = "lon"
     const val LATITUDE_KEY = "lat"
     const val CITY_KEY = "city"
+    const val POS_KEY = "pos"
 }

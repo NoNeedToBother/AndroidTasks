@@ -11,5 +11,5 @@ abstract class PresentationModule {
     @Binds
     @IntoMap
     @ViewModelKey(DebugResponseLogViewModel::class)
-    abstract fun bindWeatherViewModel(viewModel: DebugResponseLogViewModel): ViewModel
+    abstract fun bindDebugResponseLogViewModel(viewModel: DebugResponseLogViewModel): ViewModel
 }

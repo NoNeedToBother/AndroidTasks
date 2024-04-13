@@ -41,9 +41,8 @@ class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
         requireContext().appComponent.inject(this)
     }
 
-    override fun initView() {
+    override fun init() {
         initRecyclerView()
-        observeData()
     }
 
     private fun initRecyclerView() {

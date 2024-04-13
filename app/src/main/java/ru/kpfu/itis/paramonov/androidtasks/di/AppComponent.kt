@@ -8,9 +8,11 @@ import ru.kpfu.itis.paramonov.androidtasks.presentation.di.PresentationModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.di.ViewModelModule
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.MainActivity
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.CityWeatherFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugResponseFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugResponseLogFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.WeatherFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.CityWeatherViewModel
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.DebugResponseViewModel
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.WeatherViewModel
 import javax.inject.Singleton
 
@@ -42,7 +44,11 @@ interface AppComponent {
 
     fun inject(responseLogFragment: DebugResponseLogFragment)
 
+    fun inject(responseFragment: DebugResponseFragment)
+
     fun weatherViewModelFactory(): WeatherViewModel.Factory
 
     fun cityWeatherViewModelFactory(): CityWeatherViewModel.Factory
+
+    fun debugResponseViewModelFactory(): DebugResponseViewModel.Factory
 }

@@ -1,37 +1,3 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
-    <string name="colors">Colors</string>
-    <string name="dot_color">Dot color:</string>
-    <string name="graph_line_color">Graph line color</string>
-    <string name="fill_color">Graph fill color:</string>
-    <string name="gradient_color">Gradient secondary color:</string>
-    <string name="pick_color">Pick color</string>
-    <string name="save">Save</string>
-    <string name="do_not_save">Do not save</string>
-    <string name="show_gradient">Show gradient</string>
-    <string name="graph_size">Graph size properties</string>
-    <string name="dot_size">Dot size:</string>
-    <string name="line_size">Line size:</string>
-    <string name="labels">Label properties</string>
-    <string name="labels_x">Labels by x axis amount:</string>
-    <string name="labels_y">Labels by y axis amount:</string>
-    <string name="values">Values</string>
-    <string name="more_than_zero">Should be more than or equal to zero</string>
-    <string name="more_than_one">Should be more than or equal to one</string>
-    <string name="x_value">X value:</string>
-    <string name="y_value">Y value:</string>
-    <string name="add_dot">Add dot</string>
-    <string name="clear">Clear graph</string>
-
-    <string-array name="formulas">
-        <item>y = x</item>
-        <item>y = -x</item>
-        <item>y = sin(x)</item>
-        <item>y = e^x</item>
-        <item>y = x^2</item>
-        <item>y = sin(1/x)</item>
-        <item>y = 2 * x</item>
-        <item>y = √x</item>
-        <item>y = x * sin(x)</item>
-    </string-array>
 </resources>

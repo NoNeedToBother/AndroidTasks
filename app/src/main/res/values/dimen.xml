@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="section_name_text_size">32sp</dimen>
+    <dimen name="section_margin_top">12dp</dimen>
+    <dimen name="section_item_text_size">16sp</dimen>
+    <dimen name="color_hint_size">24dp</dimen>
+
+</resources>

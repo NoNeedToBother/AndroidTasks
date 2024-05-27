@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
@@ -37,7 +35,6 @@ class GraphView @JvmOverloads constructor(
     private val dotPaint = Paint().apply {
         color = Color.BLACK
         style = Paint.Style.FILL
-        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     }
     private val labelPaint = Paint().apply {
         color = Color.BLACK
@@ -61,7 +58,7 @@ class GraphView @JvmOverloads constructor(
     var graphStrokeWidth
         get() = graphStrokePaint.strokeWidth
         set(value) {
-            setAndUpdate { graphStrokePaint.strokeWidth = value }
+            if (value >= 0) setAndUpdate { graphStrokePaint.strokeWidth = value }
         }
     var graphFillColor
         get() = fillPaint.color
@@ -79,14 +76,14 @@ class GraphView @JvmOverloads constructor(
 
     var labelXAmount = LABEL_X_DEFAULT_AMOUNT
         set(value) {
-            setAndUpdate { field = value }
+            if (value >= 1) setAndUpdate { field = value }
         }
     var labelYAmount = LABEL_Y_DEFAULT_AMOUNT
         set(value) {
-            setAndUpdate { field = value }
+            if (value >= 1) setAndUpdate { field = value }
         }
 
-    private val dots = mutableListOf<Dot>()
+    private var dots = mutableListOf<Dot>()
 
     init {
         attrs?.let {
@@ -144,9 +141,10 @@ class GraphView @JvmOverloads constructor(
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-
-        var width = if (widthMode == WRAP_CONTENT || widthMode == MeasureSpec.AT_MOST) widthSize else MeasureSpec.getSize(widthMeasureSpec)
-        var height = if (heightMode == WRAP_CONTENT || heightMode == MeasureSpec.AT_MOST) (width * 9 / 16) else MeasureSpec.getSize(heightMeasureSpec)
+        var width = if (widthMode == WRAP_CONTENT || widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED)
+            widthSize else MeasureSpec.getSize(widthMeasureSpec)
+        var height = if (heightMode == WRAP_CONTENT || heightMode == MeasureSpec.AT_MOST || heightMode == MeasureSpec.UNSPECIFIED)
+                (width * 9 / 16) else MeasureSpec.getSize(heightMeasureSpec)
 
         if (widthMode == MeasureSpec.AT_MOST) {
             width = width.coerceAtMost(widthSize)
@@ -170,6 +168,11 @@ class GraphView @JvmOverloads constructor(
         val deltaY = if (labelYAmount > 1) yInterval / (labelYAmount - 1) else yInterval / labelYAmount
         val labelXPosY = (1 - GRAPH_BOTTOM_MARGIN) * height + GRAPH_BOTTOM_MARGIN / 2 * height
         val labelYPosX = width * GRAPH_MARGIN / 2
+        if (dots.size == 1) {
+            drawLabel(dots[0].x, labelXPosY, true) { width / 2f }
+            drawLabel(dots[0].y, labelYPosX, false) { height / 2f }
+            return
+        }
         drawLabelsAxis(labelXAmount, deltaX, labelXPosY, dots.first().x, true) {
             getGraphPositionX(it)
         }
@@ -227,11 +230,15 @@ class GraphView @JvmOverloads constructor(
                 pathBounds.centerX(), pathBounds.bottom,
                 intArrayOf(graphFillColor, graphGradientColor),
                 floatArrayOf(0f, 1f), Shader.TileMode.CLAMP)
-        }
-        drawPaint(fillPaint)
+        } else fillPaint.shader = null
+        if (dots.size > 1) drawPaint(fillPaint)
     }
 
     private fun Canvas.drawDots() {
+        if (dots.size == 1) {
+            drawCircle(width / 2f, height / 2f, dotSize, dotPaint)
+            return
+        }
         for (dot in dots) {
             val dotPosX = getGraphPositionX(dot.x)
             val dotPosY = getGraphPositionY(dot.y)
@@ -252,28 +259,55 @@ class GraphView @JvmOverloads constructor(
         return graphHeight - (y - dots.min().y).toFloat() * gridHeight + graphOffsetY
     }
 
+    fun clear() {
+        dots.clear()
+        invalidate()
+    }
+
     fun provideValues(vararg values: Pair<Double, Double>) {
         provideValues(listOf(*values))
     }
 
     fun provideValues(values: List<Pair<Double, Double>>) {
+        dots.clear()
+        addValues(values)
+    }
+
+    fun provideValues(values: Map<Double, Double>) {
+        dots.clear()
+        addValues(values)
+    }
+
+    fun addValues(vararg values: Pair<Double, Double>) {
+        addValues(listOf( *values))
+    }
+
+    fun addValues(values: List<Pair<Double, Double>>) {
         values.sortedBy {
             it.first
         }.forEach {
             addDot(it.first, it.second)
         }
+        dots = dots.sortedBy {
+            it.x
+        }.toMutableList()
         invalidate()
     }
 
-    fun provideValues(values: Map<Double, Double>) {
+    fun addValues(values: Map<Double, Double>) {
         values.toSortedMap()
             .forEach {
                 addDot(it.key, it.value)
             }
+        dots = dots.sortedBy {
+            it.x
+        }.toMutableList()
         invalidate()
     }
 
     private fun addDot(x: Double, y: Double) {
+        if (x.isNaN() || y.isNaN() || x.isInfinite() || y.isInfinite()) return
+
         val dot = Dot(x, y)
         dots.add(dot)
     }

@@ -1,20 +1,22 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug
 
-import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentDebugBinding
+import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseFragment
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.adapter.DebugViewPagerAdapter
 
-class DebugViewPagerFragment: Fragment(R.layout.fragment_debug) {
+class DebugViewPagerFragment: BaseFragment() {
     private val binding: FragmentDebugBinding by viewBinding(FragmentDebugBinding::bind)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun layout(): Int = R.layout.fragment_debug
+
+    override fun init() {
         initViewPager()
     }
+
+    override fun observeData() {}
+
 
     private fun initViewPager() {
         with(binding) {

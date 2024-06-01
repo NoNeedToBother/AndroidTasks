@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.weather
 
 import android.content.Context
 import androidx.fragment.app.commit
@@ -22,7 +22,7 @@ import ru.kpfu.itis.paramonov.androidtasks.utils.lazyViewModel
 import ru.kpfu.itis.paramonov.androidtasks.utils.show
 import javax.inject.Inject
 
-class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
+class WeatherFragment : BaseFragment() {
 
     @Inject
     lateinit var resourceManager: ResourceManager
@@ -35,6 +35,8 @@ class WeatherFragment : BaseFragment(R.layout.fragment_weather) {
     private val binding: FragmentWeatherBinding by viewBinding(FragmentWeatherBinding::bind)
 
     private var adapter: CityWeatherAdapter? = null
+
+    override fun layout(): Int = R.layout.fragment_weather
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

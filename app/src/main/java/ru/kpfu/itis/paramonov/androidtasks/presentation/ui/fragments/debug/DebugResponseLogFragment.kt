@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug
 
 import android.content.Context
 import androidx.fragment.app.commit
@@ -20,7 +20,7 @@ import ru.kpfu.itis.paramonov.androidtasks.utils.SpacingItemDecorator
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import javax.inject.Inject
 
-class DebugResponseLogFragment: BaseFragment(R.layout.fragment_debug_response_log) {
+class DebugResponseLogFragment: BaseFragment() {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -33,6 +33,8 @@ class DebugResponseLogFragment: BaseFragment(R.layout.fragment_debug_response_lo
     lateinit var resourceManager: ResourceManager
 
     private var adapter: ResponseLogAdapter? = null
+
+    override fun layout(): Int = R.layout.fragment_debug_response_log
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

@@ -24,6 +24,11 @@
     <string name="req_headers">Request headers: %s<br/></string>
     <string name="req_body">Request body: %s</string>
     <string name="resp_body">Response body: %s</string>
+    <string name="share_weather">Share weather</string>
+    <string name="no_fragment_view">No layout id or compose view provided</string>
+    <string name="contacts">Choose contact</string>
+    <string name="no_share_data">No data yet to share</string>
+    <string name="open">Open</string>
 
     <string-array name="cities">
         <item>Kazan</item>

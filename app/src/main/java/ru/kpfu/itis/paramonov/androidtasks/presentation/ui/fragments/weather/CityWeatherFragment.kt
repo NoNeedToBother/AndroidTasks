@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.weather
 
 import android.content.Context
 import androidx.core.os.bundleOf
@@ -26,9 +26,11 @@ import ru.kpfu.itis.paramonov.androidtasks.utils.lazyViewModel
 import ru.kpfu.itis.paramonov.androidtasks.utils.show
 import javax.inject.Inject
 
-class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
+class CityWeatherFragment: BaseFragment() {
 
     private val binding: FragmentWeatherCityBinding by viewBinding(FragmentWeatherCityBinding::bind)
+
+    private var currentTemperature: Double? = null
 
     @Inject
     lateinit var resourceManager: ResourceManager
@@ -42,12 +44,27 @@ class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
         )
     }
 
+    override fun layout(): Int = R.layout.fragment_weather_city
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         requireContext().appComponent.inject(this)
     }
 
-    override fun init() {}
+    override fun init() {
+        with(binding) {
+            fabShareWeather.setOnClickListener {
+                currentTemperature?.let { temp ->
+                    val city = requireArguments().getString(CITY_KEY, Params.CITY_EMPTY_DATA)
+                    if (city != Params.CITY_EMPTY_DATA) {
+                        ContactsBottomSheetFragment.newInstance(
+                            city, temp
+                        ).show(childFragmentManager, ContactsBottomSheetFragment.CONTACTS_BOTTOM_SHEET_TAG)
+                    } else showError(getString(R.string.no_share_data))
+                } ?: showError(getString(R.string.no_share_data))
+            }
+        }
+    }
 
     private fun initRecyclerView(forecasts: List<ForecastListWeatherUiModel>) {
         with(binding.rvForecast) {
@@ -108,7 +125,7 @@ class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
                 when (it) {
                     is CityWeatherViewModel.WeatherDataResult.Success -> {
                         val data = it.getValue()
-                        showWeather(data)
+                        onWeatherDataReceived(data)
                     }
                     is CityWeatherViewModel.WeatherDataResult.Failure ->
                         showError(it.getException())
@@ -117,8 +134,9 @@ class CityWeatherFragment: BaseFragment(R.layout.fragment_weather_city) {
         }
     }
 
-    private fun showWeather(weatherUiModel: WeatherUiModel) {
+    private fun onWeatherDataReceived(weatherUiModel: WeatherUiModel) {
         with(weatherUiModel) {
+            currentTemperature = temperature
             with(binding) {
                 tvCity.text = city
                 llWeatherInfo.show()

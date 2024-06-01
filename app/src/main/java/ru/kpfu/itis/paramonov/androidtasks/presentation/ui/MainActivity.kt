@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
-import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugViewPagerFragment
-import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.WeatherFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug.DebugViewPagerFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.weather.WeatherFragment
 import ru.kpfu.itis.paramonov.androidtasks.utils.ShakeDetector
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import javax.inject.Inject

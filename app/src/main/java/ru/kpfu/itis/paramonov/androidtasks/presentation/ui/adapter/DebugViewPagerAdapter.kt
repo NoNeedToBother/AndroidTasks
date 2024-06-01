@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.kpfu.itis.paramonov.androidtasks.R
-import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugInfoFragment
-import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.DebugResponseLogFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug.DebugInfoFragment
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug.DebugResponseLogFragment
 import java.lang.RuntimeException
 
 class DebugViewPagerAdapter(

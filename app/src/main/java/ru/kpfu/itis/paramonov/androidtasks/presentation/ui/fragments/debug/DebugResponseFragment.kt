@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
@@ -16,7 +16,7 @@ import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import ru.kpfu.itis.paramonov.androidtasks.utils.lazyViewModel
 import java.lang.StringBuilder
 
-class DebugResponseFragment: BaseFragment(R.layout.fragment_debug_response) {
+class DebugResponseFragment: BaseFragment() {
 
     private val binding: FragmentDebugResponseBinding by viewBinding(FragmentDebugResponseBinding::bind)
 
@@ -25,6 +25,7 @@ class DebugResponseFragment: BaseFragment(R.layout.fragment_debug_response) {
         requireContext().appComponent.debugResponseViewModelFactory().create(pos)
     }
 
+    override fun layout(): Int = R.layout.fragment_debug_response
 
     override fun init() {
         viewModel.getResponseInfo()

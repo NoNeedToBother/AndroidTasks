@@ -1,23 +1,23 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.debug
 
 import android.os.Build
-import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kpfu.itis.paramonov.androidtasks.BuildConfig
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.databinding.FragmentDebugInfoBinding
+import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseFragment
 
-class DebugInfoFragment(): Fragment(R.layout.fragment_debug_info) {
+class DebugInfoFragment(): BaseFragment() {
 
     private val binding: FragmentDebugInfoBinding by viewBinding(FragmentDebugInfoBinding::bind)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun layout(): Int = R.layout.fragment_debug_info
 
+    override fun init() {
         showDebugInfo()
     }
+
+    override fun observeData() {}
 
     private fun showDebugInfo() {
         with (binding) {

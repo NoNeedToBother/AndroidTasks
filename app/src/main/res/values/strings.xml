@@ -1,3 +1,53 @@
 <resources>
     <string name="app_name">AndroidTasks</string>
+    <string name="enter_city">Enter city</string>
+    <string name="get_weather">Get weather</string>
+    <string name="icon">icon</string>
+    <string name="user_not_authorized">You are not authorized</string>
+    <string name="city_not_found">This city could not be found</string>
+    <string name="bad_request">Bad request</string>
+    <string name="too_many_requests">Too many requests, try again later</string>
+    <string name="server_error">Something is wrong with server, try again later</string>
+    <string name="default_exception">Something went wrong…</string>
+    <string name="debug_app_name">app_name: %s</string>
+    <string name="debug_base_url">base_url: %s</string>
+    <string name="debug_version_code_name">version_name = %s, version_code = %d</string>
+    <string name="debug_manufacturer_model">manufacturer = %s, model = %s</string>
+    <string name="debug_version_api">android_version = Android%s, api_version = %d</string>
+    <string name="empty_weather_response">No weather data for this city</string>
+    <string name="temperature">%.2f \u2103</string>
+    <string name="empty_forecast_response">No broadcast data for this city</string>
+    <string name="date">%02d.%02d</string>
+    <string name="time">%02d:%02d</string>
+    <string name="req_method">Request method: %s</string>
+    <string name="req_url">Request url: %s</string>
+    <string name="req_headers">Request headers: %s<br/></string>
+    <string name="req_body">Request body: %s</string>
+    <string name="resp_body">Response body: %s</string>
+    <string name="share_weather">Share weather</string>
+    <string name="no_fragment_view">No layout id or compose view provided</string>
+    <string name="contacts">Choose contact</string>
+    <string name="no_share_data">No data yet to share</string>
+    <string name="open">Open</string>
+    <string name="sms_default_body">Hello! Current temperature in %s is %.2f</string>
+    <string name="provide_permissions">Please, provide permissions</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+    <string name="contacts_permission_rationale">To share weather, app should have permission to read contacts</string>
+    <string name="permission_settings">Enable in settings</string>
+    <string name="permission_settings_text">If you want to be able share weather, allow app to read contacts in settings</string>
+    <string name="go_to_settings">Go to settings</string>
+
+    <string-array name="cities">
+        <item>Kazan</item>
+        <item>Moscow</item>
+        <item>London</item>
+        <item>Paris</item>
+        <item>Sydney</item>
+        <item>Beijing</item>
+        <item>Washington</item>
+        <item>Cairo</item>
+        <item>Helsinki</item>
+        <item>Mexico</item>
+    </string-array>
 </resources>

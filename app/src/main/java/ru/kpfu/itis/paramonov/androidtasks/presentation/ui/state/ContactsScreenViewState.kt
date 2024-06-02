@@ -1,4 +1,4 @@
-package ru.kpfu.itis.paramonov.androidtasks.presentation.state
+package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.state
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State

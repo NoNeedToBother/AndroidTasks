@@ -1,15 +1,17 @@
 package ru.kpfu.itis.paramonov.androidtasks.domain.usecase
 
+import ru.kpfu.itis.paramonov.androidtasks.domain.mapper.ContactUiModelMapper
+import ru.kpfu.itis.paramonov.androidtasks.domain.repository.ContactProvider
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.ContactUiModel
 import javax.inject.Inject
 
-class GetContactsUseCase @Inject constructor() {
+class GetContactsUseCase @Inject constructor(
+    private val contactProvider: ContactProvider,
+    private val mapper: ContactUiModelMapper
+) {
     operator fun invoke(): List<ContactUiModel> {
-        return listOf(
-            ContactUiModel("Vasya Pupkin", "88005553535"),
-            ContactUiModel("Vasiliy Pupkin", "88005553535"),
-            ContactUiModel("Vasya", "88005553535"),
-            ContactUiModel("Pupkin", "88005553535")
-        )
+        return contactProvider.provide().map { contact ->
+            mapper.map(contact)
+        }
     }
 }

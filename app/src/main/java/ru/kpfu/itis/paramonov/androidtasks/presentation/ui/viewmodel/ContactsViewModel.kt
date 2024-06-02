@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.kpfu.itis.paramonov.androidtasks.domain.usecase.GetContactsUseCase
 import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseMviViewModel
-import ru.kpfu.itis.paramonov.androidtasks.presentation.intent.ContactEvent
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.intent.ContactEvent
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.ContactUiModel
 import javax.inject.Inject
 
@@ -21,7 +21,6 @@ class ContactsViewModel @Inject constructor(
     override fun onEvent(event: ContactEvent) {
         when(event) {
             is ContactEvent.OnGet -> getContacts()
-            is ContactEvent.OnChosen -> onContactChosen(event.contact)
         }
     }
 
@@ -30,9 +29,5 @@ class ContactsViewModel @Inject constructor(
             val contacts = getContactsUseCase.invoke()
             _contactsDataFlow.value = contacts
         }
-    }
-
-    private fun onContactChosen(contact: ContactUiModel) {
-
     }
 }

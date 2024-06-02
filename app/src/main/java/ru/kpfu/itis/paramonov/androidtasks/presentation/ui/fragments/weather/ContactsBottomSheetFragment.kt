@@ -1,6 +1,8 @@
 package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.weather
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -27,7 +29,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,13 +46,14 @@ import androidx.compose.runtime.setValue
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import ru.kpfu.itis.paramonov.androidtasks.R
 import ru.kpfu.itis.paramonov.androidtasks.presentation.base.BaseBottomSheetDialogFragment
-import ru.kpfu.itis.paramonov.androidtasks.presentation.intent.ContactEvent
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.intent.ContactEvent
 import ru.kpfu.itis.paramonov.androidtasks.presentation.model.ContactUiModel
-import ru.kpfu.itis.paramonov.androidtasks.presentation.state.ContactsScreenViewState
+import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.state.ContactsScreenViewState
 import ru.kpfu.itis.paramonov.androidtasks.presentation.ui.viewmodel.ContactsViewModel
 import ru.kpfu.itis.paramonov.androidtasks.utils.appComponent
 import javax.inject.Inject
@@ -90,11 +92,13 @@ class ContactsBottomSheetFragment: BaseBottomSheetDialogFragment() {
 
     @Composable
     fun ContactsSurface() {
-        val contactsState = viewModel.contactsDataFlow.collectAsState()
+        val contactsState = viewModel.contactsDataFlow.collectAsStateWithLifecycle(
+            lifecycleOwner = viewLifecycleOwner
+        )
         val screenState = ContactsScreenViewState(contactsState)
 
         Surface(border = BorderStroke(1.dp, Color.Black),
-            shape = RoundedCornerShape(4.dp)
+            shadowElevation = 6.dp
         ) {
             ContactsContent(state = screenState)
         }
@@ -110,23 +114,46 @@ class ContactsBottomSheetFragment: BaseBottomSheetDialogFragment() {
                 .background(Color.White, RoundedCornerShape(4.dp))
         ) {
             Header()
-            if (state.contacts.value.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(4.dp)
-                ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(4.dp)
+            ) {
+                if (state.contacts.value.isNotEmpty()) {
                     items(state.contacts.value.size) { index ->
-                        Contact(state.contacts.value.get(index))
+                        Contact(state.contacts.value[index])
                     }
                 }
             }
         }
     }
 
-    @OptIn(ExperimentalAnimationGraphicsApi::class)
     @Composable
     private fun Header() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            ExpandVectorDrawable()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.contacts),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp
+                )
+            }
+        }
+    }
+
+    @OptIn(ExperimentalAnimationGraphicsApi::class)
+    @Composable
+    fun ExpandVectorDrawable() {
         val image = AnimatedImageVector.animatedVectorResource(R.drawable.arrow_down_up_anim)
         var atEnd by remember {
             mutableStateOf(false)
@@ -145,35 +172,28 @@ class ContactsBottomSheetFragment: BaseBottomSheetDialogFragment() {
 
             override fun onSlide(p0: View, p1: Float) {}
         })
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Image(
+            painter = rememberAnimatedVectorPainter(animatedImageVector = image, atEnd = atEnd),
+            contentDescription = stringResource(id = R.string.open),
             modifier = Modifier
-                .padding(12.dp)
-        ) {
-            Image(
-                painter = rememberAnimatedVectorPainter(animatedImageVector = image, atEnd = atEnd),
-                contentDescription = stringResource(id = R.string.open),
-                modifier = Modifier
-                    .clickable {
-                        updateBottomSheetBehavior(!atEnd)
-                        atEnd = !atEnd
-                    }
-                    .size(36.dp)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.contacts),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                )
-            }
+                .clickable {
+                    updateBottomSheetBehavior(!atEnd)
+                    atEnd = !atEnd
+                }
+                .size(36.dp)
+        )
+    }
+
+    private fun onContactClicked(contact: ContactUiModel) {
+        val city = requireArguments().getString(CITY_KEY) ?: ""
+        val temperature = requireArguments().getDouble(TEMPERATURE_KEY)
+
+        val message = getString(R.string.sms_default_body, city, temperature)
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse(SMS_SCHEME.format(contact.phone))
+            putExtra(SMS_BODY_KEY, message)
         }
+        startActivity(intent)
     }
 
     @Composable
@@ -187,6 +207,9 @@ class ContactsBottomSheetFragment: BaseBottomSheetDialogFragment() {
                 .fillMaxWidth()
                 .padding(8.dp)
                 .height(IntrinsicSize.Min)
+                .clickable {
+                    onContactClicked(item)
+                }
         ) {
             Row(
                 modifier = Modifier
@@ -236,5 +259,8 @@ class ContactsBottomSheetFragment: BaseBottomSheetDialogFragment() {
         private const val TEMPERATURE_KEY = "temperature"
 
         const val CONTACTS_BOTTOM_SHEET_TAG = "CONTACTS_BOTTOM_SHEET"
+
+        private const val SMS_SCHEME = "smsto:%s"
+        private const val SMS_BODY_KEY = "sms_body"
     }
 }

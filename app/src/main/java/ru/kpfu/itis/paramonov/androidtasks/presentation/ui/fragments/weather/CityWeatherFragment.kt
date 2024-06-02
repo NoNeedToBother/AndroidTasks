@@ -1,6 +1,12 @@
 package ru.kpfu.itis.paramonov.androidtasks.presentation.ui.fragments.weather
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -51,16 +57,55 @@ class CityWeatherFragment: BaseFragment() {
         requireContext().appComponent.inject(this)
     }
 
+    private var permission: String = ""
+
+    private val permissionActivityResult = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) onPermissionGranted()
+        else {
+            if (permission.isNotEmpty() &&
+                shouldShowRequestPermissionRationale(permission)) showRationale()
+            else onPermissionDenied()
+        }
+    }
+
+    private fun onPermissionGranted() {
+        val city = requireArguments().getString(CITY_KEY, Params.CITY_EMPTY_DATA)
+        ContactsBottomSheetFragment.newInstance(
+            city = city, temperature = currentTemperature ?: 0.0
+        ).show(childFragmentManager, ContactsBottomSheetFragment.CONTACTS_BOTTOM_SHEET_TAG)
+    }
+
+    private fun showRationale() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.provide_permissions)
+            .setMessage(R.string.contacts_permission_rationale)
+            .setPositiveButton(R.string.allow) { _, _ ->
+                permissionActivityResult.launch(permission)
+            }
+            .setNegativeButton(R.string.deny) {_, _ -> onPermissionDenied() }
+            .show()
+    }
+
+    private fun onPermissionDenied() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.permission_settings)
+            .setMessage(R.string.permission_settings_text)
+            .setPositiveButton(R.string.go_to_settings) { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse(
+                    "package:${requireActivity().packageName}"))
+                startActivity(intent)
+            }
+            .setNegativeButton(R.string.deny) {_, _ ->}
+            .show()
+    }
+
     override fun init() {
         with(binding) {
             fabShareWeather.setOnClickListener {
-                currentTemperature?.let { temp ->
-                    val city = requireArguments().getString(CITY_KEY, Params.CITY_EMPTY_DATA)
-                    if (city != Params.CITY_EMPTY_DATA) {
-                        ContactsBottomSheetFragment.newInstance(
-                            city, temp
-                        ).show(childFragmentManager, ContactsBottomSheetFragment.CONTACTS_BOTTOM_SHEET_TAG)
-                    } else showError(getString(R.string.no_share_data))
+                currentTemperature?.let { _ ->
+                    permission = Manifest.permission.READ_CONTACTS
+                    permissionActivityResult.launch(Manifest.permission.READ_CONTACTS)
                 } ?: showError(getString(R.string.no_share_data))
             }
         }

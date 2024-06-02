@@ -29,6 +29,14 @@
     <string name="contacts">Choose contact</string>
     <string name="no_share_data">No data yet to share</string>
     <string name="open">Open</string>
+    <string name="sms_default_body">Hello! Current temperature in %s is %.2f</string>
+    <string name="provide_permissions">Please, provide permissions</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+    <string name="contacts_permission_rationale">To share weather, app should have permission to read contacts</string>
+    <string name="permission_settings">Enable in settings</string>
+    <string name="permission_settings_text">If you want to be able share weather, allow app to read contacts in settings</string>
+    <string name="go_to_settings">Go to settings</string>
 
     <string-array name="cities">
         <item>Kazan</item>
